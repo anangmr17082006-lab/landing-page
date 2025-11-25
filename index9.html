@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelForge | Elite Esports Organization</title>
+    <meta name="description" content="Join the elite. PixelForge is the premier esports organization dominating the digital battlefield.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        display: ['Orbitron', 'sans-serif'],
+                        body: ['Rajdhani', 'sans-serif']
+                    },
+                    colors: {
+                        neon: {
+                            green: '#39ff14',
+                            pink: '#ff00ff',
+                            blue: '#00f3ff',
+                        },
+                        dark: {
+                            bg: '#050505',
+                            card: '#111111',
+                        }
+                    },
+                    backgroundImage: {
+                        'scanlines': 'linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2))',
+                    },
+                    animation: {
+                        'glitch': 'glitch 1s linear infinite',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        glitch: {
+                            '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                            '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                            '62%': { transform: 'translate(0,0) skew(5deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            background-color: #050505; 
+            color: #ffffff; 
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .font-display { font-family: 'Orbitron', sans-serif; }
+
+        .scanlines {
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .glitch-text {
+            position: relative;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 #ff00ff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -1px 0 #00f3ff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(35px, 9999px, 11px, 0); }
+            20% { clip: rect(68px, 9999px, 96px, 0); }
+            40% { clip: rect(13px, 9999px, 86px, 0); }
+            60% { clip: rect(54px, 9999px, 23px, 0); }
+            80% { clip: rect(9px, 9999px, 4px, 0); }
+            100% { clip: rect(76px, 9999px, 62px, 0); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip: rect(15px, 9999px, 91px, 0); }
+            20% { clip: rect(28px, 9999px, 16px, 0); }
+            40% { clip: rect(63px, 9999px, 36px, 0); }
+            60% { clip: rect(84px, 9999px, 43px, 0); }
+            80% { clip: rect(29px, 9999px, 94px, 0); }
+            100% { clip: rect(6px, 9999px, 72px, 0); }
+        }
+
+        .clip-path-slant {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+    <div class="scanlines"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-40 bg-black/80 backdrop-blur border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-neon-green clip-path-slant flex items-center justify-center">
+                    <span class="font-display font-black text-black text-xl">P</span>
+                </div>
+                <span class="font-display font-bold text-2xl tracking-wider text-white">PIXEL<span class="text-neon-green">FORGE</span></span>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8 text-lg font-bold uppercase tracking-wider">
+                <a href="#" class="hover:text-neon-green hover:shadow-[0_0_10px_#39ff14] transition-all">Teams</a>
+                <a href="#" class="hover:text-neon-green hover:shadow-[0_0_10px_#39ff14] transition-all">Matches</a>
+                <a href="#" class="hover:text-neon-green hover:shadow-[0_0_10px_#39ff14] transition-all">Shop</a>
+                <a href="#" class="hover:text-neon-green hover:shadow-[0_0_10px_#39ff14] transition-all">Partners</a>
+            </div>
+
+            <button class="clip-path-slant bg-white text-black px-6 py-2 font-display font-bold uppercase hover:bg-neon-green transition-colors">
+                Join Club
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <!-- Video Background Placeholder -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop" alt="Gaming Setup" class="w-full h-full object-cover opacity-60">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-20 w-full">
+            <div class="max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 border border-neon-green/50 bg-neon-green/10 text-neon-green font-bold uppercase tracking-widest text-sm mb-6">
+                    <span class="w-2 h-2 bg-neon-green rounded-full animate-pulse-fast"></span>
+                    Live Tournament
+                </div>
+                
+                <h1 class="font-display text-6xl md:text-8xl font-black leading-none mb-6 glitch-text" data-text="DOMINATE THE ARENA">
+                    DOMINATE <br> THE ARENA
+                </h1>
+                
+                <p class="text-xl text-gray-300 mb-10 max-w-xl font-medium border-l-4 border-neon-green pl-6">
+                    We are PixelForge. A collective of elite gamers, content creators, and innovators pushing the boundaries of competitive esports.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <button class="clip-path-slant bg-neon-green text-black px-10 py-4 font-display font-black text-lg uppercase hover:bg-white transition-colors hover:scale-105 transform duration-200">
+                        Watch Live
+                    </button>
+                    <button class="clip-path-slant border-2 border-white text-white px-10 py-4 font-display font-bold text-lg uppercase hover:bg-white hover:text-black transition-colors">
+                        Meet the Team
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="absolute bottom-0 right-0 w-1/3 h-1/3 bg-neon-green/10 blur-[100px]"></div>
+    </section>
+
+    <!-- Latest Matches -->
+    <section class="py-24 bg-dark-card border-t border-white/5 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-display text-4xl font-bold mb-12 flex items-center gap-4">
+                <span class="w-2 h-8 bg-neon-green"></span>
+                LATEST MATCHES
+            </h2>
+
+            <div class="space-y-4">
+                <!-- Match 1 -->
+                <div class="bg-black border border-white/10 p-6 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-neon-green transition-colors group">
+                    <div class="flex items-center gap-8 w-full md:w-auto justify-center">
+                        <div class="text-right">
+                            <div class="font-display font-bold text-xl">PIXELFORGE</div>
+                            <div class="text-neon-green text-sm font-bold">WINNER</div>
+                        </div>
+                        <div class="font-display text-3xl font-black text-gray-500">VS</div>
+                        <div class="text-left">
+                            <div class="font-display font-bold text-xl text-gray-400">NEXUS</div>
+                            <div class="text-red-500 text-sm font-bold">LOSER</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center">
+                        <div class="text-xs text-gray-500 uppercase tracking-widest mb-1">Valorant Champions</div>
+                        <div class="font-display font-bold text-2xl">2 - 0</div>
+                    </div>
+
+                    <button class="border border-white/20 px-6 py-2 text-sm font-bold uppercase hover:bg-neon-green hover:text-black hover:border-neon-green transition-all w-full md:w-auto">
+                        Replay
+                    </button>
+                </div>
+
+                <!-- Match 2 -->
+                <div class="bg-black border border-white/10 p-6 flex flex-col md:flex-row items-center justify-between gap-6 hover:border-neon-green transition-colors group">
+                    <div class="flex items-center gap-8 w-full md:w-auto justify-center">
+                        <div class="text-right">
+                            <div class="font-display font-bold text-xl">PIXELFORGE</div>
+                            <div class="text-gray-400 text-sm font-bold">UPCOMING</div>
+                        </div>
+                        <div class="font-display text-3xl font-black text-gray-500">VS</div>
+                        <div class="text-left">
+                            <div class="font-display font-bold text-xl text-gray-400">TITAN</div>
+                            <div class="text-gray-400 text-sm font-bold">UPCOMING</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center">
+                        <div class="text-xs text-gray-500 uppercase tracking-widest mb-1">CS:GO Major</div>
+                        <div class="font-display font-bold text-2xl text-neon-green">20:00 CET</div>
+                    </div>
+
+                    <button class="bg-white/10 px-6 py-2 text-sm font-bold uppercase hover:bg-white hover:text-black transition-all w-full md:w-auto">
+                        Remind Me
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roster -->
+    <section class="py-24 bg-black">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-display text-4xl font-bold mb-12 flex items-center gap-4">
+                <span class="w-2 h-8 bg-neon-pink"></span>
+                ACTIVE ROSTER
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Player 1 -->
+                <div class="group relative overflow-hidden bg-dark-card border border-white/5">
+                    <div class="aspect-[3/4] bg-gradient-to-b from-gray-800 to-black relative">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop" alt="Player" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6">
+                        <h3 class="font-display text-2xl font-bold text-white mb-1">PHANTOM</h3>
+                        <p class="text-neon-pink font-bold text-sm tracking-widest uppercase">Entry Fragger</p>
+                    </div>
+                    <div class="absolute top-0 right-0 w-full h-full bg-neon-pink/20 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300 skew-x-12"></div>
+                </div>
+
+                <!-- Player 2 -->
+                <div class="group relative overflow-hidden bg-dark-card border border-white/5">
+                    <div class="aspect-[3/4] bg-gradient-to-b from-gray-800 to-black relative">
+                        <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?q=80&w=1974&auto=format&fit=crop" alt="Player" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6">
+                        <h3 class="font-display text-2xl font-bold text-white mb-1">VIPER</h3>
+                        <p class="text-neon-pink font-bold text-sm tracking-widest uppercase">Sniper</p>
+                    </div>
+                </div>
+
+                <!-- Player 3 -->
+                <div class="group relative overflow-hidden bg-dark-card border border-white/5">
+                    <div class="aspect-[3/4] bg-gradient-to-b from-gray-800 to-black relative">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1974&auto=format&fit=crop" alt="Player" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6">
+                        <h3 class="font-display text-2xl font-bold text-white mb-1">KAIROS</h3>
+                        <p class="text-neon-pink font-bold text-sm tracking-widest uppercase">Support</p>
+                    </div>
+                </div>
+
+                <!-- Player 4 -->
+                <div class="group relative overflow-hidden bg-dark-card border border-white/5">
+                    <div class="aspect-[3/4] bg-gradient-to-b from-gray-800 to-black relative">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop" alt="Player" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6">
+                        <h3 class="font-display text-2xl font-bold text-white mb-1">STRIKE</h3>
+                        <p class="text-neon-pink font-bold text-sm tracking-widest uppercase">IGL</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-white/10 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-neon-green clip-path-slant"></div>
+                <span class="font-display font-bold text-xl">PIXELFORGE</span>
+            </div>
+            
+            <div class="flex gap-8 font-bold uppercase text-sm text-gray-500">
+                <a href="#" class="hover:text-neon-green transition-colors">Sponsors</a>
+                <a href="#" class="hover:text-neon-green transition-colors">Careers</a>
+                <a href="#" class="hover:text-neon-green transition-colors">Contact</a>
+            </div>
+
+            <div class="text-gray-600 text-sm">
+                &copy; 2024 PixelForge Esports.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

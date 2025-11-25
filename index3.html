@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChronoStream | High-Performance TSDB</title>
+    <meta name="description" content="Next-Gen Time Series Database. Capture Every Nanosecond.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        chrono: {
+                            black: '#050505',
+                            dark: '#0A0F14',
+                            orange: '#FF4500',
+                            red: '#FF1E1E',
+                            surface: '#121212',
+                            gray: '#2A2A2A'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Rajdhani', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'speed-gradient': 'linear-gradient(90deg, #FF4500 0%, #FF1E1E 100%)',
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #E5E5E5;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Mencegah horizontal scroll accidental */
+        }
+
+        h1, h2, h3, .brand-font {
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .mono-text { font-family: 'Space Mono', monospace; }
+
+        /* --- VISUAL FX --- */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 69, 0, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 69, 0, 0.05) 1px, transparent 1px);
+        }
+
+        #waveCanvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; opacity: 0.4; pointer-events: none;
+        }
+
+        /* --- ANIMATION UTILITIES --- */
+        .reveal-hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            filter: blur(4px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-visible {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* Terminal Blink */
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Accessibility Override */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal-hidden { opacity: 1; transform: none; filter: none; transition: none; }
+            #waveCanvas { display: none; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #FF4500; }
+    </style>
+</head>
+<body class="selection:bg-chrono-orange selection:text-black antialiased">
+
+    <nav class="fixed w-full z-50 bg-chrono-black/80 backdrop-blur-md border-b border-chrono-gray">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-bolt text-chrono-orange text-2xl"></i>
+                    <span class="brand-font font-bold text-2xl tracking-wider text-white">Chrono<span class="text-chrono-orange">Stream</span></span>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-4 bg-chrono-surface px-4 py-1 rounded border border-gray-800">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-chrono-red animate-pulse-fast"></div>
+                        <span class="text-[10px] text-gray-400 uppercase tracking-widest">Ingestion Rate</span>
+                    </div>
+                    <span class="mono-text text-chrono-orange font-bold text-sm" id="ingestion-counter">24,501,290 ops/s</span>
+                </div>
+
+                <div class="hidden md:block">
+                    <div class="flex items-center space-x-8">
+                        <a href="#features" class="text-sm font-bold hover:text-chrono-orange transition-colors uppercase">Architecture</a>
+                        <a href="#" class="bg-chrono-orange hover:bg-orange-600 text-black px-6 py-2 text-sm font-bold uppercase tracking-wider transition-all skew-x-[-10deg]">
+                            <span class="skew-x-[10deg] inline-block">Start Free Trial</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <canvas id="waveCanvas"></canvas>
+        <div class="absolute inset-0 bg-gradient-to-t from-chrono-black via-transparent to-transparent z-10"></div>
+        <div class="absolute inset-0 grid-bg z-0 opacity-20"></div>
+
+        <div class="relative z-20 max-w-5xl mx-auto px-4 text-center mt-10">
+            <div class="reveal-hidden inline-block mb-6 border border-chrono-orange/30 bg-chrono-orange/10 px-4 py-1 rounded-sm">
+                <span class="mono-text text-chrono-orange text-xs tracking-[0.2em] uppercase">v1.4 GA: Now with Native ML Engine</span>
+            </div>
+            
+            <h1 class="reveal-hidden text-5xl md:text-8xl font-bold leading-none mb-6 text-white tracking-tighter">
+                CAPTURE EVERY <br>
+                <span class="text-transparent bg-clip-text bg-speed-gradient">NANOSECOND</span>
+            </h1>
+            
+            <p class="reveal-hidden delay-100 text-xl md:text-2xl text-gray-400 mb-10 max-w-3xl mx-auto font-light">
+                Database Time-Series berperforma tinggi. Ingest triliunan data points. Query dalam milidetik. <span class="text-white font-bold">Tanpa sampling.</span>
+            </p>
+
+            <div class="reveal-hidden delay-200 flex flex-col sm:flex-row gap-6 justify-center">
+                <button class="group relative bg-white text-black px-8 py-4 font-bold uppercase tracking-wider overflow-hidden">
+                    <span class="relative z-10 group-hover:text-chrono-orange transition-colors">Install via Docker</span>
+                    <div class="absolute inset-0 bg-chrono-black transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
+                </button>
+                <button class="border border-gray-600 text-gray-300 px-8 py-4 font-bold uppercase tracking-wider hover:border-chrono-orange hover:text-white transition-all mono-text">
+                    > Read The Whitepaper
+                </button>
+            </div>
+
+            <div id="hero-terminal" class="reveal-hidden delay-300 mt-16 mx-auto max-w-3xl bg-chrono-dark border border-gray-800 rounded-lg shadow-2xl overflow-hidden text-left relative group">
+                <div class="absolute top-0 w-full h-[1px] bg-gradient-to-r from-transparent via-chrono-orange to-transparent opacity-50"></div>
+                <div class="flex items-center px-4 py-2 bg-[#0F0F0F] border-b border-gray-800 gap-2">
+                    <div class="w-3 h-3 rounded-full bg-gray-600"></div>
+                    <div class="w-3 h-3 rounded-full bg-gray-600"></div>
+                    <div class="text-xs text-gray-500 mono-text ml-2">chronocli — ssh root@cluster-01</div>
+                </div>
+                <div class="p-6 mono-text text-sm md:text-base min-h-[160px]">
+                    <div class="text-gray-400">
+                        $ <span class="cmd-line-text"></span><span class="cursor-blink">_</span>
+                    </div>
+                    <div class="terminal-result mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="border-y border-gray-800 bg-chrono-surface py-8 overflow-hidden">
+        <div class="flex justify-around items-center max-w-7xl mx-auto px-4">
+            <div class="reveal-hidden text-center">
+                <div class="text-3xl md:text-5xl font-bold brand-font text-white">
+                    <span class="count-up" data-target="100">0</span>M+
+                </div>
+                <div class="text-xs text-gray-500 uppercase tracking-widest mt-2">Writes / Second</div>
+            </div>
+            <div class="w-px h-12 bg-gray-800"></div>
+            <div class="reveal-hidden delay-100 text-center">
+                <div class="text-3xl md:text-5xl font-bold brand-font text-white">
+                    <span class="count-up" data-target="12">0</span>x
+                </div>
+                <div class="text-xs text-gray-500 uppercase tracking-widest mt-2">Better Compression</div>
+            </div>
+            <div class="w-px h-12 bg-gray-800"></div>
+            <div class="reveal-hidden delay-200 text-center">
+                <div class="text-3xl md:text-5xl font-bold brand-font text-chrono-orange">0ms</div>
+                <div class="text-xs text-gray-500 uppercase tracking-widest mt-2">Downtime (Shared-Nothing)</div>
+            </div>
+        </div>
+    </div>
+
+    <section id="features" class="py-24 bg-chrono-black relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16 reveal-hidden">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white uppercase"><i class="fa-solid fa-microchip text-chrono-red mr-4"></i> Core Architecture</h2>
+                <div class="h-1 w-24 bg-chrono-orange"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="reveal-hidden bg-chrono-surface border border-gray-800 p-8 hover:border-chrono-orange transition-all duration-300 group">
+                    <div class="mb-6 relative">
+                        <i class="fa-solid fa-server text-4xl text-gray-600 group-hover:text-chrono-orange transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Infrastruktur Tak Terbatas</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Arsitektur <strong>Scale-out Horizontal</strong>. Sharding otomatis berdasarkan waktu dan tag memastikan distribusi beban yang sempurna untuk triliunan data points.
+                    </p>
+                </div>
+
+                <div class="reveal-hidden delay-100 bg-chrono-surface border border-gray-800 p-8 hover:border-chrono-orange transition-all duration-300 group">
+                    <div class="mb-6">
+                        <i class="fa-solid fa-file-zipper text-4xl text-gray-600 group-hover:text-chrono-orange transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Kompresi Delta-Delta</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Algoritma kompresi lossless (berbasis Gorilla) mengurangi footprint penyimpanan hingga <strong>90%</strong> dibandingkan RDMS, tanpa mengorbankan kecepatan read.
+                    </p>
+                </div>
+
+                <div class="reveal-hidden delay-200 bg-chrono-surface border border-gray-800 p-8 hover:border-chrono-red transition-all duration-300 group">
+                    <div class="mb-6">
+                        <i class="fa-solid fa-brain text-4xl text-gray-600 group-hover:text-chrono-red transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Analisis Prediktif Native</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Machine Learning di layer database. Jalankan <code class="bg-gray-800 px-1 text-chrono-orange">FORECAST()</code> atau <code class="bg-gray-800 px-1 text-chrono-orange">DETECT_ANOMALY()</code> dalam query SQL standar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-[#080808] border-t border-gray-900">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col lg:flex-row gap-12 items-center">
+            <div class="lg:w-1/2 reveal-hidden">
+                <div class="inline-block px-3 py-1 border border-chrono-red text-chrono-red text-xs font-bold uppercase mb-4 tracking-wider">Developer First</div>
+                <h2 class="text-4xl font-bold mb-6 text-white brand-font">SQL, But Faster.</h2>
+                <p class="text-gray-400 mb-6">
+                    Mendukung SQL standard dengan ekstensi time-series. Kompatibel dengan PostgreSQL wire protocol.
+                </p>
+                <ul class="space-y-4 mono-text text-sm text-gray-300">
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-chrono-orange"></i> <span>Time-bucket aggregation (1s, 1m, 1h)</span></li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-chrono-orange"></i> <span>Window functions optimized for Gap Filling</span></li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-chrono-orange"></i> <span>Continuous Aggregates</span></li>
+                </ul>
+            </div>
+
+            <div class="lg:w-1/2 w-full reveal-hidden delay-200">
+                <div class="bg-[#121212] rounded border border-gray-700 shadow-2xl relative">
+                    <div class="flex justify-between items-center px-4 py-2 bg-[#1A1A1A] border-b border-gray-700">
+                        <span class="text-xs text-gray-500 font-mono">analytics.sql</span>
+                        <div class="flex gap-1">
+                            <div class="w-2 h-2 rounded-full bg-gray-600"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-600"></div>
+                        </div>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+<pre class="mono-text text-sm leading-relaxed">
+<span class="text-purple-400">SELECT</span> 
+    time_bucket(<span class="text-green-400">'1 minute'</span>, created_at) <span class="text-purple-400">AS</span> one_min,
+    device_id,
+    <span class="text-yellow-400">AVG</span>(cpu_usage) <span class="text-purple-400">AS</span> avg_cpu,
+    <span class="text-blue-400">PREDICT_LINEAR</span>(cpu_usage, <span class="text-green-400">'1 hour'</span>) <span class="text-purple-400">AS</span> forecast
+<span class="text-purple-400">FROM</span> server_metrics
+<span class="text-purple-400">WHERE</span> created_at > <span class="text-yellow-400">NOW</span>() - <span class="text-purple-400">INTERVAL</span> <span class="text-green-400">'6 hours'</span>
+<span class="text-purple-400">GROUP BY</span> one_min, device_id;</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#050505] border-t border-gray-900 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="flex items-center gap-2 mb-4 md:mb-0">
+                    <i class="fa-solid fa-bolt text-chrono-orange"></i>
+                    <span class="brand-font text-xl text-white">ChronoStream</span>
+                </div>
+                <div class="text-center text-xs text-gray-600 mono-text">
+                    &copy; 2025 ChronoStream Data Systems. Engineered for speed.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. LIVE INGESTION MOCKUP
+            const counterElement = document.getElementById('ingestion-counter');
+            let currentOps = 24501290;
+            setInterval(() => {
+                const change = Math.floor(Math.random() * 5000) - 2000;
+                currentOps += change;
+                counterElement.innerText = currentOps.toLocaleString() + ' ops/s';
+            }, 100);
+
+            // 2. SCROLL REVEAL & COUNT-UP LOGIC
+            const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-visible');
+                        
+                        // Trigger Counters if present
+                        if (entry.target.querySelector('.count-up')) {
+                            startCounters(entry.target);
+                        }
+                        
+                        // Trigger Terminal Typing if present
+                        if (entry.target.id === 'hero-terminal') {
+                            startTerminalTypewriter();
+                        }
+
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-hidden').forEach(el => observer.observe(el));
+
+            // Function: Number Counter
+            function startCounters(container) {
+                container.querySelectorAll('.count-up').forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 1500; 
+                    const increment = target / (duration / 16);
+                    let current = 0;
+                    
+                    const update = () => {
+                        current += increment;
+                        if (current < target) {
+                            counter.innerText = Math.ceil(current);
+                            requestAnimationFrame(update);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    update();
+                });
+            }
+
+            // Function: Terminal Typewriter
+            function startTerminalTypewriter() {
+                const cmdLine = document.querySelector('.cmd-line-text');
+                const resultBox = document.querySelector('.terminal-result');
+                const command = "chrono query --range='last_10s' --agg='avg' sensor_id=8921";
+                
+                if (!cmdLine || cmdLine.innerText.length > 0) return; // Prevent re-run
+
+                let i = 0;
+                function type() {
+                    if (i < command.length) {
+                        cmdLine.innerHTML += command.charAt(i);
+                        i++;
+                        setTimeout(type, 40); // Typing speed
+                    } else {
+                        // Show result after typing finishes
+                        setTimeout(() => {
+                            resultBox.innerHTML = `
+                                <div class="text-chrono-orange mt-2 fade-in">
+                                    <span class="text-white">Processing...</span> <br>
+                                    > Scanned 14,000,000 points in <span class="text-white font-bold">0.04s</span><br>
+                                    > Result: 89.42°C (Anomalous Spike Detected)<br>
+                                    > Compression Ratio: 18:1
+                                </div>
+                            `;
+                        }, 300);
+                    }
+                }
+                type();
+            }
+
+            // 3. CANVAS WAVE ANIMATION (Background)
+            const canvas = document.getElementById('waveCanvas');
+            const ctx = canvas.getContext('2d');
+            let width, height, waves = [];
+
+            class Wave {
+                constructor(y, color, amp, speed) {
+                    this.y = y; this.color = color; this.amp = amp; this.speed = speed; this.offset = Math.random() * 100;
+                }
+                draw(time) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, this.y);
+                    for (let x = 0; x < width; x += 10) { // Optimize: step 10
+                        ctx.lineTo(x, this.y + Math.sin(x * 0.003 + this.offset + time * this.speed) * this.amp);
+                    }
+                    ctx.strokeStyle = this.color;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            }
+
+            function initWaves() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                waves = [
+                    new Wave(height * 0.5, 'rgba(255, 69, 0, 0.4)', 50, 0.002),
+                    new Wave(height * 0.5, 'rgba(255, 30, 30, 0.2)', 70, 0.003)
+                ];
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                const time = Date.now();
+                waves.forEach(w => w.draw(time));
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', initWaves);
+            initWaves();
+            animate();
+        });
+    </script>
+</body>
+</html>

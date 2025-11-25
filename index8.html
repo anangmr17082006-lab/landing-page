@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith | Luxury Living Redefined</title>
+    <meta name="description" content="Discover the pinnacle of architectural elegance. Zenith offers exclusive properties for the discerning few.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Lato', 'sans-serif']
+                    },
+                    colors: {
+                        gold: {
+                            400: '#d4af37',
+                            500: '#c5a028',
+                            600: '#b08d1e',
+                        },
+                        cream: '#f9f9f7',
+                        charcoal: '#1a1a1a',
+                    },
+                    letterSpacing: {
+                        'widest-xl': '0.25em',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1.5s ease-out forwards',
+                        'reveal': 'reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        reveal: {
+                            '0%': { transform: 'scaleX(0)', transformOrigin: 'left' },
+                            '100%': { transform: 'scaleX(1)', transformOrigin: 'left' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            background-color: #f9f9f7; 
+            color: #1a1a1a; 
+        }
+        
+        .image-reveal {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-reveal::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f9f9f7;
+            transform-origin: right;
+            animation: reveal-image 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes reveal-image {
+            0% { transform: scaleX(1); }
+            100% { transform: scaleX(0); }
+        }
+
+        .gold-line {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .gold-line::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #d4af37;
+            transition: width 0.6s ease;
+        }
+        
+        .gold-line:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-cream/90 backdrop-blur-sm border-b border-gray-200 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+            <a href="#" class="font-serif text-2xl tracking-widest font-bold">ZENITH</a>
+            
+            <div class="hidden md:flex items-center gap-12 text-xs font-bold tracking-widest-xl uppercase">
+                <a href="#" class="gold-line">Residences</a>
+                <a href="#" class="gold-line">Philosophy</a>
+                <a href="#" class="gold-line">Amenities</a>
+                <a href="#" class="gold-line">Contact</a>
+            </div>
+
+            <button class="hidden md:block border border-charcoal px-8 py-3 text-xs font-bold tracking-widest uppercase hover:bg-charcoal hover:text-white transition-colors duration-300">
+                Inquire
+            </button>
+            
+            <button class="md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop" alt="Luxury Interior" class="w-full h-full object-cover opacity-90">
+            <div class="absolute inset-0 bg-black/20"></div>
+        </div>
+
+        <div class="relative z-10 text-center text-white px-6">
+            <p class="text-xs md:text-sm font-bold tracking-widest-xl uppercase mb-6 animate-fade-in-up" style="animation-delay: 0.2s;">The Art of Living</p>
+            <h1 class="font-serif text-5xl md:text-8xl mb-8 leading-tight animate-fade-in-up" style="animation-delay: 0.4s;">
+                Elevated <br> <span class="italic font-light">Perspectives</span>
+            </h1>
+            <div class="animate-fade-in-up" style="animation-delay: 0.6s;">
+                <a href="#explore" class="inline-block border-b border-white pb-1 text-sm tracking-widest uppercase hover:text-gold-400 hover:border-gold-400 transition-colors duration-300">
+                    Explore Collection
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction -->
+    <section id="explore" class="py-32 px-6 bg-cream">
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+            <div class="order-2 md:order-1">
+                <div class="w-12 h-px bg-gold-400 mb-8"></div>
+                <h2 class="font-serif text-4xl md:text-5xl mb-8 leading-tight">Designed for the <br> <span class="italic text-gray-500">Extraordinary</span></h2>
+                <p class="text-gray-600 leading-relaxed mb-8 font-light">
+                    Zenith represents a curated collection of the world's most exquisite properties. Where architectural mastery meets timeless elegance, creating sanctuaries that transcend the ordinary.
+                </p>
+                <a href="#" class="text-xs font-bold tracking-widest uppercase border-b border-charcoal pb-2 hover:text-gold-600 hover:border-gold-600 transition-colors">Read Our Story</a>
+            </div>
+            <div class="order-1 md:order-2 image-reveal shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1600596542815-27b88e54e621?q=80&w=2069&auto=format&fit=crop" alt="Minimalist Architecture" class="w-full h-[600px] object-cover">
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Properties -->
+    <section class="py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-20">
+                <div>
+                    <p class="text-xs font-bold tracking-widest-xl uppercase text-gold-600 mb-4">Curated Selection</p>
+                    <h2 class="font-serif text-4xl">Featured Residences</h2>
+                </div>
+                <a href="#" class="hidden md:block text-xs font-bold tracking-widest uppercase hover:text-gold-600 transition-colors">View All</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Property 1 -->
+                <div class="group cursor-pointer">
+                    <div class="overflow-hidden mb-6 relative">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" alt="Villa" class="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
+                    </div>
+                    <h3 class="font-serif text-2xl mb-2 group-hover:text-gold-600 transition-colors">The Azure Villa</h3>
+                    <p class="text-xs tracking-widest uppercase text-gray-500">Cannes, France</p>
+                </div>
+
+                <!-- Property 2 -->
+                <div class="group cursor-pointer mt-0 md:-mt-16">
+                    <div class="overflow-hidden mb-6 relative">
+                        <img src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?q=80&w=2070&auto=format&fit=crop" alt="Penthouse" class="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
+                    </div>
+                    <h3 class="font-serif text-2xl mb-2 group-hover:text-gold-600 transition-colors">Skyline Penthouse</h3>
+                    <p class="text-xs tracking-widest uppercase text-gray-500">New York, USA</p>
+                </div>
+
+                <!-- Property 3 -->
+                <div class="group cursor-pointer">
+                    <div class="overflow-hidden mb-6 relative">
+                        <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2070&auto=format&fit=crop" alt="Estate" class="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
+                    </div>
+                    <h3 class="font-serif text-2xl mb-2 group-hover:text-gold-600 transition-colors">Kyoto Estate</h3>
+                    <p class="text-xs tracking-widest uppercase text-gray-500">Kyoto, Japan</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-white py-24 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16">
+            <div class="col-span-1 md:col-span-1">
+                <a href="#" class="font-serif text-3xl tracking-widest font-bold block mb-8">ZENITH</a>
+                <p class="text-gray-400 font-light text-sm leading-relaxed">
+                    Redefining luxury living through exceptional architecture and unparalleled service.
+                </p>
+            </div>
+            
+            <div>
+                <h4 class="text-xs font-bold tracking-widest uppercase mb-8 text-gold-500">Contact</h4>
+                <p class="text-gray-400 font-light text-sm mb-2">inquire@zenith.com</p>
+                <p class="text-gray-400 font-light text-sm">+1 (555) 000-0000</p>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-bold tracking-widest uppercase mb-8 text-gold-500">Office</h4>
+                <p class="text-gray-400 font-light text-sm leading-relaxed">
+                    15 Central Park West<br>
+                    New York, NY 10023
+                </p>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-bold tracking-widest uppercase mb-8 text-gold-500">Social</h4>
+                <div class="flex gap-6 text-sm">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/10 flex justify-between text-xs text-gray-500">
+            <p>&copy; 2024 Zenith Real Estate.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white">Privacy</a>
+                <a href="#" class="hover:text-white">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

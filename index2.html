@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModelForge | Low-Code MLOps Platform</title>
+    <meta name="description" content="Sederhanakan deployment, pemantauan, dan pemeliharaan model ML. Dari Prototype ke Production, Instan.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0B0F19',     // Sangat gelap, hampir hitam
+                            primary: '#4F46E5',  // Indigo
+                            accent: '#8B5CF6',   // Violet/Purple
+                            surface: '#1E293B',  // Slate 800
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 1, filter: 'brightness(1.2)' },
+                            '50%': { opacity: .8, filter: 'brightness(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0F19;
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4F46E5;
+            border-radius: 4px;
+        }
+
+        /* Grid Background pattern */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Pipeline Animation Line */
+        .pipeline-line {
+            stroke-dasharray: 20;
+            animation: dash 1s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -40;
+            }
+        }
+        
+        .code-snippet {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-accent selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <div class="relative w-8 h-8 flex items-center justify-center">
+                        <i class="fa-solid fa-gear text-brand-accent text-2xl animate-spin-slow"></i>
+                        <i class="fa-solid fa-bolt text-white text-xs absolute"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">Model<span class="text-brand-accent">Forge</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#features" class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium">Fitur</a>
+                        <a href="#pipeline" class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium">Pipeline</a>
+                        <a href="#docs" class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium">Dokumentasi</a>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <a href="#" class="bg-brand-primary hover:bg-indigo-600 text-white px-5 py-2 rounded-full text-sm font-bold transition-all shadow-[0_0_15px_rgba(79,70,229,0.5)] hover:shadow-[0_0_25px_rgba(79,70,229,0.7)]">
+                        Get Early Access
+                    </a>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                        <span class="sr-only">Open main menu</span>
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden bg-brand-surface border-b border-gray-700" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#features" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Fitur</a>
+                <a href="#pipeline" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Pipeline</a>
+                <a href="#" class="text-brand-accent font-bold block px-3 py-2 rounded-md text-base">Get Early Access</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 z-0 bg-grid"></div>
+        <!-- Decorative blobs -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-brand-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-brand-accent rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center">
+            
+            <!-- Hero Text -->
+            <div class="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-surface border border-indigo-500/30 text-indigo-300 text-xs font-semibold mb-6">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                    </span>
+                    v2.0 Stable Release
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                    From Prototype to <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-accent">Production, Instantly.</span>
+                </h1>
+                <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto lg:mx-0">
+                    Platform Low-Code MLOps yang mengubah script Jupyter Anda menjadi production-ready API yang scalable. Tanpa YAML hell. Tanpa infrastruktur manual.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#" class="flex items-center justify-center gap-2 bg-brand-primary hover:bg-indigo-600 text-white px-8 py-4 rounded-lg font-bold transition-all shadow-lg hover:shadow-indigo-500/50">
+                        <i class="fa-solid fa-rocket"></i> Deploy Model Sekarang
+                    </a>
+                    <a href="#" class="flex items-center justify-center gap-2 bg-transparent border border-gray-600 hover:border-white text-gray-300 hover:text-white px-8 py-4 rounded-lg font-bold transition-all">
+                        <i class="fa-solid fa-play"></i> Lihat Demo
+                    </a>
+                </div>
+                
+                <!-- Trust Badges -->
+                <div class="mt-10 pt-8 border-t border-gray-800">
+                    <p class="text-sm text-gray-500 mb-4 uppercase tracking-wider font-semibold">Dipercaya oleh tim Data di</p>
+                    <div class="flex gap-6 justify-center lg:justify-start opacity-50 grayscale hover:grayscale-0 transition-all">
+                        <i class="fa-brands fa-aws text-2xl"></i>
+                        <i class="fa-brands fa-google text-2xl"></i>
+                        <i class="fa-brands fa-python text-2xl"></i>
+                        <i class="fa-brands fa-docker text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Visual / Graphic -->
+            <div class="lg:w-1/2 w-full relative">
+                <div class="relative rounded-xl bg-gray-900 border border-gray-700 shadow-2xl p-6 glass-card animate-float">
+                    <!-- Fake UI Header -->
+                    <div class="flex items-center gap-2 mb-4 border-b border-gray-700 pb-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <div class="text-xs text-gray-500 ml-2 font-mono">pipeline_view.jsx</div>
+                    </div>
+
+                    <!-- Pipeline Visualization -->
+                    <div class="flex flex-col gap-6 relative">
+                        <!-- Connecting Line -->
+                        <div class="absolute left-6 top-8 bottom-8 w-0.5 bg-gray-700 z-0"></div>
+                        <div class="absolute left-6 top-8 bottom-8 w-0.5 bg-brand-primary z-0 h-1/2 animate-pulse"></div>
+
+                        <!-- Step 1 -->
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div class="w-12 h-12 rounded-full bg-gray-800 border-2 border-brand-primary flex items-center justify-center shadow-[0_0_15px_rgba(79,70,229,0.5)]">
+                                <i class="fa-brands fa-python text-brand-primary"></i>
+                            </div>
+                            <div class="bg-gray-800 p-3 rounded border border-gray-700 flex-1">
+                                <div class="text-xs text-gray-400 mb-1">Model Source</div>
+                                <div class="font-mono text-sm text-white">fraud_detection_v1.pkl</div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 (Active) -->
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div class="w-12 h-12 rounded-full bg-brand-primary flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.6)]">
+                                <i class="fa-solid fa-gear text-white animate-spin"></i>
+                            </div>
+                            <div class="bg-gray-800 p-3 rounded border border-brand-primary flex-1">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-xs text-brand-accent font-bold">Building & Containerizing...</div>
+                                    <div class="text-xs text-gray-500">45s</div>
+                                </div>
+                                <div class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden">
+                                    <div class="bg-brand-accent h-full w-3/4 animate-pulse"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div class="w-12 h-12 rounded-full bg-gray-800 border-2 border-gray-600 flex items-center justify-center">
+                                <i class="fa-solid fa-cloud-arrow-up text-gray-400"></i>
+                            </div>
+                            <div class="bg-gray-800 p-3 rounded border border-gray-700 flex-1 opacity-50">
+                                <div class="text-xs text-gray-400 mb-1">Production Endpoint</div>
+                                <div class="font-mono text-sm text-gray-500">api.modelforge.ai/v1/predict</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Floating Info Cards -->
+                <div class="absolute -right-4 top-10 bg-brand-surface p-3 rounded-lg border border-green-500/30 shadow-lg animate-bounce" style="animation-duration: 3s;">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-check-circle text-green-400"></i>
+                        <span class="text-xs font-bold text-white">Tests Passed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-brand-dark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Fitur Tanpa Kompromi</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Kami menangani infrastruktur rumit sehingga Anda bisa fokus pada tuning akurasi model.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="group p-8 rounded-2xl bg-brand-surface border border-gray-800 hover:border-brand-primary transition-all hover:transform hover:-translate-y-1 hover:shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-primary opacity-5 rounded-bl-full transition-all group-hover:opacity-10"></div>
+                    <div class="w-14 h-14 bg-indigo-900/50 rounded-lg flex items-center justify-center mb-6 text-brand-primary group-hover:text-white group-hover:bg-brand-primary transition-colors">
+                        <i class="fa-solid fa-rocket text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Deployment 1-Klik</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Lupakan Dockerfile dan Kubernetes manifest. Upload model pickle/onnx, kami bungkus menjadi API endpoint skalabel dalam hitungan detik.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="group p-8 rounded-2xl bg-brand-surface border border-gray-800 hover:border-brand-accent transition-all hover:transform hover:-translate-y-1 hover:shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-brand-accent opacity-5 rounded-bl-full transition-all group-hover:opacity-10"></div>
+                    <div class="w-14 h-14 bg-purple-900/50 rounded-lg flex items-center justify-center mb-6 text-brand-accent group-hover:text-white group-hover:bg-brand-accent transition-colors">
+                        <i class="fa-solid fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Pemantauan Drift</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Deteksi otomatis saat distribusi data (Data Drift) atau kualitas prediksi (Concept Drift) menurun. Notifikasi real-time via Slack/Email.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="group p-8 rounded-2xl bg-brand-surface border border-gray-800 hover:border-red-500 transition-all hover:transform hover:-translate-y-1 hover:shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-red-500 opacity-5 rounded-bl-full transition-all group-hover:opacity-10"></div>
+                    <div class="w-14 h-14 bg-red-900/30 rounded-lg flex items-center justify-center mb-6 text-red-500 group-hover:text-white group-hover:bg-red-500 transition-colors">
+                        <i class="fa-solid fa-history text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Rollback Otomatis</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Jika deployment baru menghasilkan error rate > 1%, sistem otomatis mengembalikan traffic ke versi stabil terakhir (Shadow Mode available).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visual Process Flow -->
+    <section id="pipeline" class="py-20 border-t border-gray-800 bg-gradient-to-b from-brand-dark to-brand-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between mb-12">
+                <h2 class="text-3xl font-bold">Standardized CI/CD Pipeline</h2>
+                <div class="flex gap-2 text-sm font-mono text-gray-400 mt-4 md:mt-0">
+                    <span class="px-2 py-1 bg-gray-800 rounded">git push</span>
+                    <span class="text-gray-600">-></span>
+                    <span class="px-2 py-1 bg-brand-primary text-white rounded">deployed</span>
+                </div>
+            </div>
+
+            <!-- Flowchart SVG Container -->
+            <div class="relative bg-gray-900/50 rounded-2xl border border-gray-700 p-8 overflow-hidden">
+                <!-- Background Grid -->
+                <div class="absolute inset-0 bg-grid opacity-30"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+                    <!-- Node 1 -->
+                    <div class="flex flex-col items-center text-center group w-full md:w-auto">
+                        <div class="w-16 h-16 rounded-2xl bg-gray-800 border-2 border-gray-600 flex items-center justify-center mb-4 group-hover:border-white transition-colors relative">
+                            <i class="fa-brands fa-github text-3xl"></i>
+                            <div class="absolute -top-2 -right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                        </div>
+                        <h4 class="font-bold">Code Commit</h4>
+                        <p class="text-xs text-gray-500 mt-1">Git Trigger</p>
+                    </div>
+
+                    <!-- Connector Arrow -->
+                    <div class="hidden md:block flex-1 h-0.5 bg-gray-700 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-brand-primary to-transparent w-1/2 animate-[translateX_2s_infinite]"></div>
+                    </div>
+                    <i class="md:hidden fa-solid fa-arrow-down text-gray-600"></i>
+
+                    <!-- Node 2 -->
+                    <div class="flex flex-col items-center text-center group w-full md:w-auto">
+                        <div class="w-16 h-16 rounded-2xl bg-gray-800 border-2 border-brand-primary flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(79,70,229,0.3)] relative">
+                            <i class="fa-solid fa-gears text-3xl text-brand-primary animate-spin-slow"></i>
+                            <div class="absolute -top-2 -right-2 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                        </div>
+                        <h4 class="font-bold text-brand-primary">ModelForge Engine</h4>
+                        <p class="text-xs text-gray-500 mt-1">Build, Test, Containerize</p>
+                    </div>
+
+                    <!-- Connector Arrow -->
+                    <div class="hidden md:block flex-1 h-0.5 bg-gray-700 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-brand-primary to-transparent w-1/2 animate-[translateX_2s_infinite] delay-75"></div>
+                    </div>
+                    <i class="md:hidden fa-solid fa-arrow-down text-gray-600"></i>
+
+                    <!-- Node 3 -->
+                    <div class="flex flex-col items-center text-center group w-full md:w-auto">
+                        <div class="w-16 h-16 rounded-2xl bg-gray-800 border-2 border-green-500 flex items-center justify-center mb-4 group-hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all relative">
+                            <i class="fa-solid fa-server text-3xl text-green-500"></i>
+                            <div class="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                        </div>
+                        <h4 class="font-bold text-green-400">Production API</h4>
+                        <p class="text-xs text-gray-500 mt-1">Auto-scaling K8s</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Preview Section -->
+    <section class="py-20 bg-brand-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12">
+            <div class="w-full md:w-1/2">
+                <h2 class="text-3xl font-bold mb-6">Integrasi Seamless SDK</h2>
+                <p class="text-gray-400 mb-8">
+                    Gunakan Python SDK kami untuk mendaftarkan model langsung dari notebook eksperimen Anda. Versi dikelola secara otomatis.
+                </p>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="fa-solid fa-check text-brand-accent"></i> Support Scikit-learn, TensorFlow, PyTorch
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="fa-solid fa-check text-brand-accent"></i> Manajemen Environment Otomatis
+                    </li>
+                    <li class="flex items-center gap-3 text-gray-300">
+                        <i class="fa-solid fa-check text-brand-accent"></i> Built-in A/B Testing Routing
+                    </li>
+                </ul>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="bg-gray-900 rounded-lg shadow-2xl overflow-hidden border border-gray-700">
+                    <div class="flex items-center px-4 py-2 bg-gray-800 border-b border-gray-700">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <div class="ml-4 text-xs text-gray-500 font-mono">deploy_script.py</div>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+<pre class="code-snippet text-sm text-gray-300">
+<span class="text-purple-400">import</span> modelforge <span class="text-purple-400">as</span> mf
+
+<span class="text-gray-500"># Inisialisasi Project</span>
+project = mf.get_project(<span class="text-green-400">"fraud-detection"</span>)
+
+<span class="text-gray-500"># Log dan Deploy Model</span>
+deployment = project.deploy(
+    model_path=<span class="text-green-400">"models/xgboost_v2.pkl"</span>,
+    strategy=<span class="text-green-400">"canary"</span>,       <span class="text-gray-500"># Canary Deployment 10%</span>
+    drift_check=<span class="text-blue-400">True</span>,        <span class="text-gray-500"># Aktifkan auto-monitoring</span>
+    min_instances=<span class="text-blue-400">2</span>          <span class="text-gray-500"># Auto-scaling min replicas</span>
+)
+
+print(<span class="text-green-400">f"Model live at: {deployment.endpoint}"</span>)
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-brand-primary opacity-10"></div>
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-accent blur-3xl opacity-20 rounded-full"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <h2 class="text-4xl font-bold mb-6 text-white">Siap Menghentikan Deployment Manual?</h2>
+            <p class="text-xl text-indigo-200 mb-10">
+                Bergabung dengan tim engineering modern yang mengirimkan model ke produksi dalam hitungan menit, bukan bulan.
+            </p>
+            <form class="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
+                <input type="email" placeholder="Email kerja Anda" class="px-6 py-4 rounded-lg bg-gray-900 border border-gray-700 text-white focus:outline-none focus:border-brand-primary flex-1">
+                <button type="button" class="bg-brand-primary hover:bg-indigo-600 text-white px-8 py-4 rounded-lg font-bold transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] whitespace-nowrap">
+                    Mulai Gratis
+                </button>
+            </form>
+            <p class="text-xs text-gray-500 mt-4">No credit card required for developer tier.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-2 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-gear text-brand-accent"></i>
+                        <span class="font-bold text-xl">ModelForge</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">
+                        Platform MLOps end-to-end untuk tim yang serius tentang produksi AI.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Platform</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-primary">Model Registry</a></li>
+                        <li><a href="#" class="hover:text-brand-primary">Serving Engine</a></li>
+                        <li><a href="#" class="hover:text-brand-primary">Observability</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-primary">Documentation</a></li>
+                        <li><a href="#" class="hover:text-brand-primary">API Reference</a></li>
+                        <li><a href="#" class="hover:text-brand-primary">Community</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-primary">About</a></li>
+                        <li><a href="#" class="hover:text-brand-primary">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-primary">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-xs text-gray-600">&copy; 2025 ModelForge Inc. All rights reserved.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-600 hover:text-white"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-white"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-white"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar Scrolled Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-brand-dark/90', 'backdrop-blur-md', 'shadow-lg');
+            } else {
+                navbar.classList.remove('bg-brand-dark/90', 'backdrop-blur-md', 'shadow-lg');
+            }
+        });
+
+        // Simple Intersection Observer for Fade-in animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section h2, section p, .group').forEach(el => {
+            el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-10');
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
