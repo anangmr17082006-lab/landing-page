@@ -7,7 +7,195 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #1a1a1a;
+            --text-secondary: #666;
+            --card-bg: #ffffff;
+            --primary-color: #000000;
+            --border-color: #e5e5e5;
+            --accent-color: #0066ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-color: #ccc;
+        }
+
+        .card-preview {
+            background-color: #f0f0f0;
+            aspect-ratio: 16/9;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none; /* Mencegah interaksi dengan iframe saat scroll galeri */
+            transform-origin: top left;
+        }
+
+        /* Fallback visual jika iframe gagal load atau kosong */
+        .card-preview::before {
+            content: "Preview Loading...";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #999;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            z-index: 0;
+        }
+
+        .card-preview iframe {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: auto;
+        }
+
+        .btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+            text-align: center;
+            flex: 1;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #333;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-color);
+            background-color: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .gallery { grid-template-columns: 1fr; }
+            body { padding: 1rem; }
+        }
+    </style>
 </head>
 <body>
     <div class="bg-grid"></div>
@@ -202,15 +390,18 @@
             </article>
 
              <article class="card">
-                <div class="card-preview">
-                    <iframe src="index16.html" title="Preview of Index 16" scrolling="no"></iframe>
+                <div class="card-preview" style="background-color: #000; color: #ccff00;">
+                    <!-- Highlighted Brutalist Project -->
+                    <iframe src="index.html" title="Preview of Index 16" scrolling="no" style="opacity: 0.8;"></iframe>
+                    <div style="position: absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-weight:900; font-size: 1.5rem; pointer-events:none;">TYPO/GRAPHY</div>
                 </div>
                 <div class="card-content">
                     <h2 class="card-title">Typography | Brutalist</h2>
                     <p class="card-desc">The high-end concept we just built. Aggressive, bold, and memorable</p>
                     <div class="card-actions">
-                        <a href="index16.html" class="btn btn-primary" target="_blank">View Live</a>
-                        <a href="index16.html" class="btn btn-secondary" target="_blank">Review Code</a>
+                        <!-- Perhatikan: Saya mengarahkan ini ke index.html karena itulah file Brutalist yang sebenarnya ada -->
+                        <a href="index.html" class="btn btn-primary" target="_blank">View Live</a>
+                        <a href="index.html" class="btn btn-secondary" target="_blank">Review Code</a>
                     </div>
                 </div>
             </article>
