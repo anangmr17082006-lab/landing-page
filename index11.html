@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUMDROP | Radical Pop-Art Store</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@300;400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'display': ['"Lexend Mega"', 'sans-serif'],
+                        'mono': ['"Space Mono"', 'monospace'],
+                    },
+                    colors: {
+                        'neo-yellow': '#FFDE59',
+                        'neo-purple': '#CBC3E3',
+                        'neo-blue': '#7EC8E3',
+                        'neo-pink': '#FF99C8',
+                        'neo-black': '#050505',
+                        'neo-white': '#FAFAFA',
+                    },
+                    boxShadow: {
+                        'hard': '5px 5px 0px 0px rgba(5,5,5,1)',
+                        'hard-sm': '3px 3px 0px 0px rgba(5,5,5,1)',
+                        'hard-lg': '10px 10px 0px 0px rgba(5,5,5,1)',
+                    },
+                    translate: {
+                        'hard': '5px',
+                        'hard-lg': '10px',
+                    },
+                    animation: {
+                        'marquee': 'marquee 15s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAFAFA;
+            color: #050505;
+        }
+        
+        /* Smooth scrolling but snappy */
+        html { scroll-behavior: smooth; }
+
+        .brutal-border {
+            border: 3px solid #050505;
+        }
+
+        .brutal-btn {
+            transition: all 0.1s ease-in-out;
+        }
+        .brutal-btn:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0px 0px rgba(5,5,5,1);
+        }
+        .brutal-btn:active {
+            transform: translate(0px, 0px);
+            box-shadow: 0px 0px 0px 0px rgba(5,5,5,1);
+        }
+
+        /* Marquee Container */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="font-mono bg-neo-white text-neo-black overflow-x-hidden selection:bg-neo-black selection:text-neo-yellow">
+
+    <nav class="fixed w-full z-50 bg-neo-white border-b-4 border-neo-black">
+        <div class="max-w-7xl mx-auto flex justify-between items-stretch h-20">
+            <div class="flex items-center px-6 border-r-4 border-neo-black bg-neo-yellow">
+                <span class="font-display font-black text-2xl tracking-tighter">GUM<span class="text-white text-stroke">DROP</span>.</span>
+            </div>
+            
+            <div class="hidden md:flex flex-1 items-center justify-center gap-8 text-sm font-bold uppercase tracking-wide">
+                <a href="#" class="hover:bg-neo-black hover:text-white px-4 py-2 transition-colors">Shop</a>
+                <a href="#" class="hover:bg-neo-black hover:text-white px-4 py-2 transition-colors">Collections</a>
+                <a href="#" class="hover:bg-neo-black hover:text-white px-4 py-2 transition-colors">About</a>
+            </div>
+
+            <div class="flex items-center gap-0">
+                <div class="h-full flex items-center px-6 border-l-4 border-neo-black hover:bg-neo-pink cursor-pointer transition-colors">
+                    <span class="font-bold">CART (0)</span>
+                </div>
+                <div class="h-full flex items-center px-6 border-l-4 border-neo-black bg-neo-black text-white hover:bg-white hover:text-black cursor-pointer transition-colors">
+                    <span class="font-bold">LOGIN</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-20 min-h-screen flex flex-col justify-between">
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-12">
+            <div class="lg:col-span-7 p-8 lg:p-16 flex flex-col justify-center border-b-4 lg:border-b-0 lg:border-r-4 border-neo-black bg-white relative overflow-hidden">
+                <div class="absolute top-10 right-10 w-32 h-32 bg-neo-blue rounded-full border-4 border-neo-black mix-blend-multiply opacity-50"></div>
+                <div class="absolute bottom-20 left-10 w-24 h-24 bg-neo-pink rotate-45 border-4 border-neo-black mix-blend-multiply opacity-50"></div>
+
+                <div class="relative z-10">
+                    <div class="inline-block px-4 py-2 bg-neo-black text-white font-bold mb-6 transform -rotate-2 border-2 border-transparent hover:border-neo-black hover:bg-white hover:text-neo-black transition-colors shadow-hard-sm">
+                        NEW COLLECTION 2025
+                    </div>
+                    <h1 class="font-display font-black text-6xl lg:text-8xl leading-none mb-8">
+                        NOT YOUR <br>
+                        AVERAGE <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-neo-pink to-neo-blue" style="-webkit-text-stroke: 4px #050505;">CANDY.</span>
+                    </h1>
+                    <p class="text-lg mb-10 max-w-md font-bold leading-relaxed bg-neo-yellow p-4 border-4 border-neo-black shadow-hard-sm transform rotate-1">
+                        Streetwear aesthetic meets everyday objects. Bold colors, zero apologies, and 100% radical design.
+                    </p>
+                    <div class="flex gap-4">
+                        <button class="brutal-btn px-8 py-4 bg-neo-blue border-4 border-neo-black font-display font-bold text-xl uppercase shadow-hard">
+                            Shop Now
+                        </button>
+                        <button class="px-8 py-4 bg-transparent border-4 border-neo-black font-bold text-xl hover:bg-neo-black hover:text-white transition-colors">
+                            Lookbook
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 bg-neo-purple border-b-4 border-neo-black relative flex items-center justify-center p-10 overflow-hidden">
+                <div class="absolute inset-0" style="background-image: radial-gradient(#050505 2px, transparent 2px); background-size: 20px 20px; opacity: 0.1;"></div>
+                
+                <div class="relative w-full max-w-sm aspect-[3/4]">
+                    <div class="absolute inset-0 bg-neo-yellow border-4 border-neo-black transform translate-x-4 translate-y-4 shadow-hard"></div>
+                    <div class="absolute inset-0 bg-white border-4 border-neo-black flex flex-col items-center justify-center p-8 text-center shadow-hard hover:translate-x-1 hover:translate-y-1 hover:shadow-hard-sm transition-all duration-300">
+                        <div class="w-full h-2/3 bg-neo-black mb-6 flex items-center justify-center overflow-hidden border-2 border-neo-black">
+                            <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?q=80&w=2070&auto=format&fit=crop" alt="Abstract Pop Art" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500 grayscale hover:grayscale-0">
+                        </div>
+                        <h3 class="font-display font-bold text-2xl mb-2">THE 'POP' HOODIE</h3>
+                        <p class="font-mono text-sm mb-4">Limited Edition / 050 Units</p>
+                        <div class="text-3xl font-black">$89.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="h-16 bg-neo-black text-neo-white border-b-4 border-neo-black flex items-center overflow-hidden border-t-4">
+            <div class="marquee-container w-full">
+                <div class="inline-block animate-marquee pl-full">
+                    <span class="font-display font-bold text-3xl mx-8">★ FREE SHIPPING WORLDWIDE</span>
+                    <span class="font-display font-bold text-3xl mx-8 text-neo-yellow">★ NEW DROP EVERY FRIDAY</span>
+                    <span class="font-display font-bold text-3xl mx-8">★ 100% ORGANIC COTTON</span>
+                    <span class="font-display font-bold text-3xl mx-8 text-neo-pink">★ NO BORING DESIGNS</span>
+                    <span class="font-display font-bold text-3xl mx-8">★ FREE SHIPPING WORLDWIDE</span>
+                    <span class="font-display font-bold text-3xl mx-8 text-neo-yellow">★ NEW DROP EVERY FRIDAY</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 border-b-4 border-neo-black">
+        <div class="p-12 border-b-4 md:border-b-0 md:border-r-4 border-neo-black bg-white hover:bg-neo-yellow transition-colors group">
+            <div class="w-16 h-16 bg-neo-black text-white flex items-center justify-center font-display text-3xl font-bold mb-6 border-4 border-transparent group-hover:bg-white group-hover:text-black group-hover:border-neo-black shadow-hard-sm">01</div>
+            <h3 class="font-display font-bold text-2xl mb-4">LOUD DESIGN</h3>
+            <p class="font-bold text-sm leading-relaxed">We don't do subtle. We don't do minimal. We create items that scream for attention in a quiet world.</p>
+        </div>
+        <div class="p-12 border-b-4 md:border-b-0 md:border-r-4 border-neo-black bg-white hover:bg-neo-pink transition-colors group">
+            <div class="w-16 h-16 bg-neo-black text-white flex items-center justify-center font-display text-3xl font-bold mb-6 border-4 border-transparent group-hover:bg-white group-hover:text-black group-hover:border-neo-black shadow-hard-sm">02</div>
+            <h3 class="font-display font-bold text-2xl mb-4">ETHICAL STUFF</h3>
+            <p class="font-bold text-sm leading-relaxed">Made locally. Fair wages. No sweatshops. We care about the humans who make our crazy ideas reality.</p>
+        </div>
+        <div class="p-12 bg-white hover:bg-neo-blue transition-colors group">
+            <div class="w-16 h-16 bg-neo-black text-white flex items-center justify-center font-display text-3xl font-bold mb-6 border-4 border-transparent group-hover:bg-white group-hover:text-black group-hover:border-neo-black shadow-hard-sm">03</div>
+            <h3 class="font-display font-bold text-2xl mb-4">LIFETIME CLUB</h3>
+            <p class="font-bold text-sm leading-relaxed">Buy once, join forever. Get access to secret parties, exclusive drops, and our discord server.</p>
+        </div>
+    </section>
+
+    <section class="p-8 lg:p-16 bg-neo-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                <h2 class="font-display font-black text-5xl lg:text-6xl uppercase" style="-webkit-text-stroke: 2px black; color: transparent;">Featured<br><span class="text-neo-black" style="-webkit-text-stroke: 0;">Items</span></h2>
+                <a href="#" class="font-bold text-xl underline decoration-4 underline-offset-4 decoration-neo-pink hover:bg-neo-black hover:text-white px-2 transition-all">VIEW ALL PRODUCTS -></a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="group relative">
+                    <div class="absolute inset-0 bg-neo-black transform translate-x-2 translate-y-2"></div>
+                    <div class="relative bg-white border-4 border-neo-black p-4 transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1">
+                        <div class="aspect-square bg-gray-100 border-2 border-neo-black mb-4 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop" alt="Product" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-lg leading-tight">ACID WASH <br>SNEAKERS</h3>
+                            <span class="bg-neo-yellow px-2 py-1 font-bold text-xs border-2 border-neo-black">$120</span>
+                        </div>
+                        <button class="w-full py-2 bg-neo-black text-white font-bold hover:bg-neo-blue hover:text-black border-2 border-transparent hover:border-neo-black transition-colors">ADD TO CART</button>
+                    </div>
+                </div>
+
+                <div class="group relative mt-0 lg:mt-12">
+                    <div class="absolute inset-0 bg-neo-black transform translate-x-2 translate-y-2"></div>
+                    <div class="relative bg-white border-4 border-neo-black p-4 transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1">
+                        <div class="aspect-square bg-gray-100 border-2 border-neo-black mb-4 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=1964&auto=format&fit=crop" alt="Product" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-lg leading-tight">GRAPHIC <br>TEE V2</h3>
+                            <span class="bg-neo-pink px-2 py-1 font-bold text-xs border-2 border-neo-black">$45</span>
+                        </div>
+                        <button class="w-full py-2 bg-neo-black text-white font-bold hover:bg-neo-blue hover:text-black border-2 border-transparent hover:border-neo-black transition-colors">ADD TO CART</button>
+                    </div>
+                </div>
+
+                <div class="group relative">
+                    <div class="absolute inset-0 bg-neo-black transform translate-x-2 translate-y-2"></div>
+                    <div class="relative bg-white border-4 border-neo-black p-4 transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1">
+                        <div class="aspect-square bg-gray-100 border-2 border-neo-black mb-4 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1996&auto=format&fit=crop" alt="Product" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-lg leading-tight">VANS X <br>GUMDROP</h3>
+                            <span class="bg-neo-blue px-2 py-1 font-bold text-xs border-2 border-neo-black">$95</span>
+                        </div>
+                        <button class="w-full py-2 bg-neo-black text-white font-bold hover:bg-neo-blue hover:text-black border-2 border-transparent hover:border-neo-black transition-colors">ADD TO CART</button>
+                    </div>
+                </div>
+
+                <div class="group relative mt-0 lg:mt-12">
+                    <div class="absolute inset-0 bg-neo-black transform translate-x-2 translate-y-2"></div>
+                    <div class="relative bg-white border-4 border-neo-black p-4 transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1">
+                        <div class="aspect-square bg-gray-100 border-2 border-neo-black mb-4 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1935&auto=format&fit=crop" alt="Product" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-lg leading-tight">TOTE BAG <br>CANVAS</h3>
+                            <span class="bg-neo-purple px-2 py-1 font-bold text-xs border-2 border-neo-black">$30</span>
+                        </div>
+                        <button class="w-full py-2 bg-neo-black text-white font-bold hover:bg-neo-blue hover:text-black border-2 border-transparent hover:border-neo-black transition-colors">ADD TO CART</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-neo-black text-white border-t-4 border-neo-black pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <div class="lg:col-span-2">
+                    <h2 class="font-display font-black text-5xl mb-6 text-neo-yellow">STAY WEIRD.</h2>
+                    <p class="font-mono text-sm max-w-md mb-8">
+                        Join our newsletter to get updates on new drops. We promise not to spam you with boring corporate emails. We only send the good stuff.
+                    </p>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="YOUR@EMAIL.COM" class="bg-white text-black font-bold p-4 border-4 border-transparent focus:border-neo-yellow focus:outline-none w-full max-w-xs">
+                        <button class="bg-neo-blue text-black font-bold px-6 py-4 border-4 border-transparent hover:bg-white hover:border-neo-blue transition-colors">SUBMIT</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-display font-bold text-xl mb-6 text-neo-pink">SITEMAP</h4>
+                    <ul class="space-y-4 font-bold text-sm">
+                        <li><a href="#" class="hover:text-neo-yellow hover:underline decoration-4">HOME</a></li>
+                        <li><a href="#" class="hover:text-neo-yellow hover:underline decoration-4">SHOP ALL</a></li>
+                        <li><a href="#" class="hover:text-neo-yellow hover:underline decoration-4">COLLECTIONS</a></li>
+                        <li><a href="#" class="hover:text-neo-yellow hover:underline decoration-4">ABOUT US</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-display font-bold text-xl mb-6 text-neo-pink">SOCIALS</h4>
+                    <ul class="space-y-4 font-bold text-sm">
+                        <li><a href="#" class="hover:text-neo-yellow hover:underline decoration-4">INSTAGRAM ↗</a></li>
+                        <li><a href="#" class="hover:text-neo-yellow hover:underline decoration-4">TIKTOK ↗</a></li>
+                        <li><a href="#" class="hover:text-neo-yellow hover:underline decoration-4">TWITTER ↗</a></li>
+                        <li><a href="#" class="hover:text-neo-yellow hover:underline decoration-4">DISCORD ↗</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t-2 border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="font-mono text-xs">© 2025 GUMDROP STUDIOS. ALL RIGHTS RESERVED.</p>
+                <p class="font-mono text-xs">DESIGNED TO BE LOUD.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

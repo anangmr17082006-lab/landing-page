@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERRA | Sustainable Architecture</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Manrope:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['"Cormorant Garamond"', 'serif'],
+                        'sans': ['"Manrope"', 'sans-serif'],
+                    },
+                    colors: {
+                        'terra-bg': '#F2F0E9',      // Krem tulang (Off-white)
+                        'terra-green': '#4A5D4E',   // Hijau Sage Gelap
+                        'terra-clay': '#C66B4E',    // Terracotta/Tanah Liat
+                        'terra-charcoal': '#2C2C2C', // Hitam lembut
+                        'terra-stone': '#D8D4C9',   // Abu-abu hangat
+                    },
+                    backgroundImage: {
+                        'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+                    },
+                    keyframes: {
+                        'fade-up': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'scale-reveal': {
+                            '0%': { transform: 'scale(1.1)' },
+                            '100%': { transform: 'scale(1)' },
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fade-up 1s ease-out forwards',
+                        'scale-reveal': 'scale-reveal 1.5s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F2F0E9;
+            color: #2C2C2C;
+        }
+        
+        /* Smooth Text Rendering */
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+        /* Custom Selection */
+        ::selection { background: #C66B4E; color: white; }
+
+        .image-mask {
+            border-radius: 120px 0 120px 0;
+            overflow: hidden;
+        }
+
+        .text-vertical {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="font-sans relative">
+    
+    <div class="fixed inset-0 bg-noise pointer-events-none z-50 mix-blend-multiply"></div>
+
+    <nav class="fixed w-full z-40 bg-terra-bg/80 backdrop-blur-sm py-6">
+        <div class="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#" class="font-serif text-3xl italic font-semibold text-terra-green">Terra.</a>
+            
+            <div class="hidden md:flex gap-12 text-sm tracking-widest uppercase font-medium text-terra-charcoal/80">
+                <a href="#" class="hover:text-terra-clay transition-colors">Projects</a>
+                <a href="#" class="hover:text-terra-clay transition-colors">Studio</a>
+                <a href="#" class="hover:text-terra-clay transition-colors">Materials</a>
+                <a href="#" class="hover:text-terra-clay transition-colors">Journal</a>
+            </div>
+
+            <button class="w-10 h-10 flex flex-col justify-center gap-1.5 md:hidden">
+                <span class="w-full h-px bg-terra-charcoal"></span>
+                <span class="w-2/3 h-px bg-terra-charcoal ml-auto"></span>
+            </button>
+
+            <a href="#" class="hidden md:inline-block border border-terra-charcoal/30 px-6 py-2 rounded-full text-sm hover:bg-terra-green hover:border-terra-green hover:text-white transition-all duration-300">
+                Get in Touch
+            </a>
+        </div>
+    </nav>
+
+    <header class="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-7 relative z-10">
+                <span class="inline-block text-terra-clay font-medium tracking-widest uppercase text-xs mb-6 animate-fade-up" style="animation-delay: 0.1s;">— Sustainable Living</span>
+                <h1 class="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-terra-green mb-8 animate-fade-up" style="animation-delay: 0.2s;">
+                    Architecture <br>
+                    <span class="italic font-light ml-8 md:ml-16">grounded</span> in <br>
+                    Nature.
+                </h1>
+                <p class="text-lg md:text-xl text-terra-charcoal/70 max-w-lg leading-relaxed mb-12 animate-fade-up" style="animation-delay: 0.3s;">
+                    We design spaces that breathe. Creating harmony between modern habitation and the natural world through biophilic design and raw materials.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6 animate-fade-up" style="animation-delay: 0.4s;">
+                    <button class="bg-terra-green text-white px-8 py-4 rounded-full hover:bg-terra-charcoal transition-colors duration-300">
+                        View Selected Works
+                    </button>
+                    <button class="flex items-center gap-3 px-6 py-4 text-terra-charcoal group">
+                        <span class="w-10 h-10 rounded-full border border-terra-charcoal/20 flex items-center justify-center group-hover:bg-terra-clay group-hover:border-terra-clay group-hover:text-white transition-all">
+                            ↓
+                        </span>
+                        <span class="text-sm font-medium uppercase tracking-wide">Scroll Down</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 relative">
+                <div class="image-mask h-[500px] md:h-[700px] w-full relative">
+                    <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?q=80&w=2070&auto=format&fit=crop" alt="Organic Architecture" class="absolute inset-0 w-full h-full object-cover animate-scale-reveal">
+                </div>
+                <div class="absolute -bottom-10 -left-10 bg-white p-6 md:p-8 max-w-xs shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] rounded-tr-[40px] hidden md:block animate-fade-up" style="animation-delay: 0.5s;">
+                    <p class="font-serif text-2xl italic text-terra-green mb-2">"A house is not a machine, it is a garden."</p>
+                    <p class="text-xs text-terra-charcoal/50 uppercase tracking-widest mt-4">Design Philosophy</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-24 px-6 md:px-12 max-w-[1400px] mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-20">
+            <h2 class="font-serif text-4xl md:text-5xl text-terra-charcoal">
+                Curated <span class="italic text-terra-clay">Spaces</span>
+            </h2>
+            <div class="flex gap-2 mt-6 md:mt-0">
+                <span class="h-px w-12 bg-terra-charcoal/20 self-center"></span>
+                <span class="text-sm uppercase tracking-widest text-terra-charcoal/60">2023 — 2025</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
+            
+            <div class="group cursor-pointer">
+                <div class="relative overflow-hidden rounded-[40px] mb-6 aspect-[4/5]">
+                    <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1974&auto=format&fit=crop" alt="Desert Villa" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-terra-charcoal/10 group-hover:bg-transparent transition-colors"></div>
+                </div>
+                <div class="flex justify-between items-start border-t border-terra-charcoal/10 pt-4">
+                    <div>
+                        <h3 class="font-serif text-2xl group-hover:text-terra-clay transition-colors">The Stone House</h3>
+                        <p class="text-sm text-terra-charcoal/50 mt-1">Joshua Tree, CA</p>
+                    </div>
+                    <span class="text-xs border border-terra-charcoal/20 px-3 py-1 rounded-full uppercase">Residential</span>
+                </div>
+            </div>
+
+            <div class="group cursor-pointer md:mt-32">
+                <div class="relative overflow-hidden rounded-[40px] mb-6 aspect-[4/5]">
+                    <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop" alt="Forest Retreat" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-terra-charcoal/10 group-hover:bg-transparent transition-colors"></div>
+                </div>
+                <div class="flex justify-between items-start border-t border-terra-charcoal/10 pt-4">
+                    <div>
+                        <h3 class="font-serif text-2xl group-hover:text-terra-clay transition-colors">Kyoto Pavilion</h3>
+                        <p class="text-sm text-terra-charcoal/50 mt-1">Arashiyama, Japan</p>
+                    </div>
+                    <span class="text-xs border border-terra-charcoal/20 px-3 py-1 rounded-full uppercase">Hospitality</span>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <section class="py-24 bg-terra-stone/20 my-12">
+        <div class="max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-3 gap-16">
+            <div class="md:col-span-1">
+                <p class="font-serif text-3xl italic text-terra-green leading-snug mb-8">
+                    "We believe that true luxury lies in the absence of noise and the presence of clarity."
+                </p>
+                <a href="#" class="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-bold border-b border-terra-charcoal pb-1 hover:text-terra-clay hover:border-terra-clay transition-colors">
+                    Read Our Journal
+                </a>
+            </div>
+            <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div>
+                    <span class="block text-4xl mb-4 text-terra-clay">01</span>
+                    <h4 class="font-bold text-lg mb-2 uppercase tracking-wide">Raw Materials</h4>
+                    <p class="text-terra-charcoal/70 text-sm leading-relaxed">
+                        We prioritize materials that age gracefully. Unfinished concrete, weathered wood, and natural stone that tell a story over time.
+                    </p>
+                </div>
+                <div>
+                    <span class="block text-4xl mb-4 text-terra-clay">02</span>
+                    <h4 class="font-bold text-lg mb-2 uppercase tracking-wide">Light & Shadow</h4>
+                    <p class="text-terra-charcoal/70 text-sm leading-relaxed">
+                        Our designs sculpt natural light to create shifting atmospheres throughout the day, connecting interiors with the circadian rhythm.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-terra-charcoal text-terra-bg pt-24 pb-12 px-6 md:px-12">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="flex flex-col md:flex-row justify-between gap-16 mb-24">
+                <div class="max-w-md">
+                    <h2 class="font-serif text-5xl md:text-6xl mb-8">Let's build <br> something <span class="italic text-terra-stone/50">timeless.</span></h2>
+                    <form class="flex gap-0 border-b border-white/20 pb-2">
+                        <input type="email" placeholder="Email Address" class="bg-transparent w-full focus:outline-none placeholder-white/30 text-lg">
+                        <button class="text-sm uppercase tracking-widest hover:text-terra-clay transition-colors">Send</button>
+                    </form>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-12 text-sm">
+                    <div>
+                        <h5 class="opacity-50 uppercase tracking-widest mb-6 text-xs">Studio</h5>
+                        <p>1288 Green Street</p>
+                        <p>San Francisco, CA</p>
+                        <p class="mt-4">+1 415 000 0000</p>
+                        <p>hello@terra.studio</p>
+                    </div>
+                    <div>
+                        <h5 class="opacity-50 uppercase tracking-widest mb-6 text-xs">Social</h5>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="hover:text-terra-clay transition-colors">Instagram</a></li>
+                            <li><a href="#" class="hover:text-terra-clay transition-colors">Pinterest</a></li>
+                            <li><a href="#" class="hover:text-terra-clay transition-colors">Behance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center border-t border-white/10 pt-8 gap-4 text-xs opacity-40 uppercase tracking-widest">
+                <p>&copy; 2025 Terra Architecture.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:opacity-100">Privacy</a>
+                    <a href="#" class="hover:opacity-100">Imprint</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

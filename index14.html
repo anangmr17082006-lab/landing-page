@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM_STATUS // ORBITAL</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['"Share Tech Mono"', 'monospace'],
+                    },
+                    colors: {
+                        'tech-black': '#0a0a0a',
+                        'tech-grid': '#333333',
+                        'tech-accent': '#00ff41', /* Terminal Green */
+                        'tech-alert': '#ff3333',
+                    },
+                    spacing: {
+                        'px': '1px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+            background-image: 
+                linear-gradient(rgba(51, 51, 51, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(51, 51, 51, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* HARD LINES ONLY */
+        * {
+            border-radius: 0 !important; /* Forbidden Rounded Corners */
+        }
+
+        .outline-box {
+            outline: 1px solid #333;
+            background: rgba(10, 10, 10, 0.9);
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0, 255, 65, 0.05) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100%; }
+        }
+
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; border-left: 1px solid #333; }
+        ::-webkit-scrollbar-thumb { background: #00ff41; }
+    </style>
+</head>
+<body class="font-mono text-xs md:text-sm h-screen overflow-hidden flex flex-col p-2 gap-2">
+
+    <div class="scanline"></div>
+
+    <header class="flex justify-between items-center outline-box p-2 h-12 shrink-0">
+        <div class="flex gap-4">
+            <span class="bg-tech-accent text-tech-black px-2 font-bold">SYS_ROOT</span>
+            <span>// UNIT_04</span>
+            <span class="text-gray-500">LAT: 34.0522 N</span>
+        </div>
+        <div class="flex gap-4">
+            <span class="text-tech-accent blink">● ONLINE</span>
+            <span>UPTIME: 144:20:11</span>
+        </div>
+    </header>
+
+    <main class="flex-1 grid grid-cols-12 gap-2 overflow-hidden">
+        
+        <aside class="col-span-12 md:col-span-2 outline-box flex flex-col justify-between p-2">
+            <nav class="flex flex-col gap-1">
+                <div class="p-2 bg-tech-grid/30 border-l-2 border-tech-accent text-white cursor-pointer hover:bg-white hover:text-black transition-colors">DASHBOARD</div>
+                <div class="p-2 border-l-2 border-transparent text-gray-500 cursor-pointer hover:border-tech-accent hover:text-white transition-colors">TELEMETRY</div>
+                <div class="p-2 border-l-2 border-transparent text-gray-500 cursor-pointer hover:border-tech-accent hover:text-white transition-colors">LOGS</div>
+                <div class="p-2 border-l-2 border-transparent text-gray-500 cursor-pointer hover:border-tech-accent hover:text-white transition-colors">DIAGNOSTICS</div>
+                <div class="p-2 border-l-2 border-transparent text-gray-500 cursor-pointer hover:border-tech-accent hover:text-white transition-colors">SETTINGS</div>
+            </nav>
+            
+            <div class="border-t border-tech-grid pt-2 mt-2">
+                <div class="text-[10px] text-gray-600 mb-1">MEMORY USAGE</div>
+                <div class="w-full h-2 bg-tech-grid">
+                    <div class="h-full bg-tech-accent w-[45%]"></div>
+                </div>
+                <div class="flex justify-between mt-1 text-[10px] text-tech-accent">
+                    <span>45%</span>
+                    <span>16GB</span>
+                </div>
+            </div>
+        </aside>
+
+        <section class="col-span-12 md:col-span-7 flex flex-col gap-2">
+            
+            <div class="flex-1 outline-box relative p-4 flex items-center justify-center overflow-hidden group">
+                <div class="absolute inset-0" style="background-image: radial-gradient(#333 1px, transparent 1px); background-size: 40px 40px; opacity: 0.5;"></div>
+                
+                <div class="w-48 h-48 border border-tech-accent flex items-center justify-center relative animate-[spin_10s_linear_infinite]">
+                    <div class="absolute w-full h-[1px] bg-tech-accent"></div>
+                    <div class="absolute h-full w-[1px] bg-tech-accent"></div>
+                    <div class="w-32 h-32 border border-dashed border-gray-500 rounded-full flex items-center justify-center"> <div class="w-4 h-4 bg-tech-alert blink"></div>
+                    </div>
+                </div>
+
+                <div class="absolute top-2 left-2 text-[10px] text-gray-500">CAM_01 [LIVE]</div>
+                <div class="absolute bottom-2 right-2 text-[10px] text-gray-500">ZOOM: 1.0x</div>
+                
+                <div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
+                    <div class="w-[80%] h-[1px] bg-tech-accent"></div>
+                    <div class="h-[80%] w-[1px] bg-tech-accent absolute"></div>
+                </div>
+            </div>
+
+            <div class="h-48 outline-box p-2 font-mono text-xs overflow-y-auto" id="console-log">
+                <div class="text-gray-500">> SYSTEM INIT...</div>
+                <div class="text-tech-accent">> CONNECTION ESTABLISHED (PORT 8080)</div>
+                <div class="text-gray-500">> LOADING MODULES... [OK]</div>
+                </div>
+        </section>
+
+        <aside class="col-span-12 md:col-span-3 flex flex-col gap-2">
+            
+            <div class="outline-box p-2 grid grid-cols-2 gap-px bg-tech-grid">
+                <div class="bg-tech-black p-2 flex flex-col items-center justify-center aspect-video hover:bg-tech-grid/50 transition-colors">
+                    <span class="text-gray-500 text-[10px]">CPU TEMP</span>
+                    <span class="text-xl font-bold text-white">42°C</span>
+                </div>
+                <div class="bg-tech-black p-2 flex flex-col items-center justify-center aspect-video hover:bg-tech-grid/50 transition-colors">
+                    <span class="text-gray-500 text-[10px]">FAN SPD</span>
+                    <span class="text-xl font-bold text-white">1200</span>
+                </div>
+                <div class="bg-tech-black p-2 flex flex-col items-center justify-center aspect-video hover:bg-tech-grid/50 transition-colors">
+                    <span class="text-gray-500 text-[10px]">NET IN</span>
+                    <span class="text-xl font-bold text-tech-accent">4.2 MB</span>
+                </div>
+                <div class="bg-tech-black p-2 flex flex-col items-center justify-center aspect-video hover:bg-tech-grid/50 transition-colors">
+                    <span class="text-gray-500 text-[10px]">NET OUT</span>
+                    <span class="text-xl font-bold text-white">1.1 MB</span>
+                </div>
+            </div>
+
+            <div class="flex-1 outline-box p-2">
+                <div class="bg-tech-grid/20 p-1 mb-2 text-center text-[10px] tracking-widest text-gray-400">SYSTEM CHECKS</div>
+                <ul class="space-y-1">
+                    <li class="flex justify-between items-center p-1 hover:bg-white hover:text-black cursor-pointer group">
+                        <span>[x] DATABASE</span>
+                        <span class="text-tech-accent group-hover:text-black">OK</span>
+                    </li>
+                    <li class="flex justify-between items-center p-1 hover:bg-white hover:text-black cursor-pointer group">
+                        <span>[x] FIREWALL</span>
+                        <span class="text-tech-accent group-hover:text-black">OK</span>
+                    </li>
+                    <li class="flex justify-between items-center p-1 hover:bg-white hover:text-black cursor-pointer group">
+                        <span>[ ] BACKUP</span>
+                        <span class="text-tech-alert group-hover:text-black blink">PENDING</span>
+                    </li>
+                    <li class="flex justify-between items-center p-1 hover:bg-white hover:text-black cursor-pointer group">
+                        <span>[x] PROXY</span>
+                        <span class="text-tech-accent group-hover:text-black">OK</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="outline-box p-4 border border-tech-alert/50 bg-tech-alert/10">
+                <div class="flex items-start gap-2">
+                    <div class="text-2xl text-tech-alert">!</div>
+                    <div>
+                        <h4 class="font-bold text-tech-alert mb-1">ALERT</h4>
+                        <p class="text-[10px] leading-tight text-gray-300">Unusual traffic detected on Port 22. Inspect logs immediately.</p>
+                    </div>
+                </div>
+                <button class="w-full mt-3 bg-tech-alert text-black font-bold py-1 hover:bg-white transition-colors">DISMISS</button>
+            </div>
+
+        </aside>
+    </main>
+
+    <footer class="outline-box h-8 shrink-0 flex items-center justify-between px-2 text-[10px] text-gray-600">
+        <div>BUILD: v.2.0.94 // STABLE</div>
+        <div class="flex gap-4">
+            <span>KEY: 0x9281...</span>
+            <span>USER: ADMIN</span>
+        </div>
+    </footer>
+
+    <script>
+        // FAKE LOG GENERATOR
+        const logs = [
+            "Scanning sector 7G...",
+            "Packet loss detected (0.02%)",
+            "Refreshing cache...",
+            "User 'GUEST' disconnected",
+            "Optimizing render pipeline...",
+            "Ping: 24ms",
+            "Writing to disk...",
+            "Encryption key rotated"
+        ];
+
+        const logContainer = document.getElementById('console-log');
+
+        setInterval(() => {
+            const randomLog = logs[Math.floor(Math.random() * logs.length)];
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+            
+            const div = document.createElement('div');
+            div.className = "text-gray-400 font-mono";
+            div.innerHTML = `<span class="text-gray-600">[${time}]</span> ${randomLog}`;
+            
+            logContainer.appendChild(div);
+            logContainer.scrollTop = logContainer.scrollHeight;
+
+            // Keep DOM light
+            if (logContainer.children.length > 20) {
+                logContainer.removeChild(logContainer.firstChild);
+            }
+        }, 1500);
+    </script>
+</body>
+</html>
