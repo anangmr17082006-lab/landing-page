@@ -149,12 +149,38 @@
         .delay-100 { transition-delay: 0.1s; }
         .delay-200 { transition-delay: 0.2s; }
         .delay-300 { transition-delay: 0.3s; }
+
+        /* Mobile Menu Transitions */
+        #mobile-menu {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .menu-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="font-body text-xl selection:bg-px-pink selection:text-white">
 
     <canvas id="bg-canvas"></canvas>
     <div class="scanlines"></div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-px-dark z-50 transform translate-x-full flex flex-col justify-center items-center gap-8 border-l-4 border-px-green">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-px-red border-2 border-px-red p-2 font-header text-xs hover:bg-px-red hover:text-white transition-colors">
+            CLOSE [X]
+        </button>
+        
+        <div class="text-px-gray text-9xl absolute -z-10 opacity-10 font-header rotate-90">MENU</div>
+
+        <a href="#process" class="mobile-link text-3xl text-white hover:text-px-cyan font-header">[PROCESS]</a>
+        <a href="#work" class="mobile-link text-3xl text-white hover:text-px-yellow font-header">[WORK]</a>
+        <a href="#pricing" class="mobile-link text-3xl text-white hover:text-px-pink font-header">[PRICING]</a>
+        <a href="#faq" class="mobile-link text-3xl text-white hover:text-px-green font-header">[FAQ]</a>
+        
+        <button class="mt-8 bg-px-pink text-white px-6 py-4 border-2 border-white font-header text-sm shadow-[4px_4px_0px_0px_#fff] active:translate-y-1 active:shadow-none">
+            INIT_PROJECT()
+        </button>
+    </div>
 
     <!-- Navbar -->
     <nav class="fixed w-full z-40 top-0 left-0 border-b-4 border-px-gray bg-px-dark/95 backdrop-blur-md transition-all duration-300" id="navbar">
@@ -164,6 +190,8 @@
                     <div class="w-8 h-8 bg-px-green animate-pulse border-2 border-white"></div>
                     <span class="font-header text-white text-sm md:text-lg tracking-tight">PIXEL<span class="text-px-green">FORGE</span></span>
                 </div>
+                
+                <!-- Desktop Menu -->
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8 font-header text-xs">
                         <a href="#process" class="hover:text-px-cyan transition-colors">[PROCESS]</a>
@@ -175,6 +203,15 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Mobile Menu Toggle Button -->
+                <div class="md:hidden">
+                    <button id="open-menu-btn" class="text-white border-2 border-white p-2 hover:bg-white hover:text-black transition-colors pixel-box shadow-[2px_2px_0px_0px_#fff]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
@@ -184,39 +221,39 @@
         <div class="text-center px-4 max-w-5xl mx-auto z-10 parallax-layer" data-speed="0.5">
             <div class="inline-flex items-center gap-2 border-2 border-px-cyan px-4 py-1 mb-6 bg-black/50 backdrop-blur reveal active">
                 <div class="w-3 h-3 bg-px-red rounded-full animate-ping"></div>
-                <span class="text-px-cyan uppercase tracking-widest text-lg">System Status: ONLINE</span>
+                <span class="text-px-cyan uppercase tracking-widest text-xs md:text-lg">System Status: ONLINE</span>
             </div>
             
-            <h1 class="font-header text-4xl md:text-7xl lg:text-8xl leading-tight mb-8 glitch-wrapper reveal delay-100 active">
+            <h1 class="font-header text-3xl md:text-7xl lg:text-8xl leading-tight mb-8 glitch-wrapper reveal delay-100 active">
                 <span class="glitch" data-text="DOMINATE">DOMINATE</span>
                 <span class="text-white">THE GRID</span>
             </h1>
             
-            <p class="text-gray-300 text-2xl md:text-3xl max-w-3xl mx-auto mb-12 bg-black/60 p-6 border-x-4 border-px-green leading-relaxed reveal delay-200 active">
+            <p class="text-gray-300 text-xl md:text-3xl max-w-3xl mx-auto mb-12 bg-black/60 p-6 border-x-4 border-px-green leading-relaxed reveal delay-200 active">
                 Kami tidak membuat website "cantik". Kami merekayasa aset digital berkinerja tinggi yang mengonversi trafik menjadi profit. 
                 <span class="text-px-green block mt-2">> Zero Fluff. Maximum Efficiency.</span>
             </p>
 
             <div class="flex flex-col md:flex-row gap-6 justify-center reveal delay-300 active">
-                <a href="#pricing" class="font-header text-sm bg-px-green text-black px-8 py-5 pixel-box hover:bg-white transition-colors">
+                <a href="#pricing" class="font-header text-xs md:text-sm bg-px-green text-black px-8 py-5 pixel-box hover:bg-white transition-colors">
                     VIEW_UPGRADES
                 </a>
-                <a href="#work" class="font-header text-sm border-4 border-white text-white px-8 py-5 hover:bg-white hover:text-black transition-all box-shadow-none hover:shadow-[8px_8px_0px_0px_#fff]">
+                <a href="#work" class="font-header text-xs md:text-sm border-4 border-white text-white px-8 py-5 hover:bg-white hover:text-black transition-all box-shadow-none hover:shadow-[8px_8px_0px_0px_#fff]">
                     VIEW_DATABASE
                 </a>
             </div>
         </div>
         
         <!-- Background Elements for Parallax -->
-        <div class="absolute top-1/4 left-10 text-px-gray opacity-20 text-9xl font-header -z-10 parallax-layer" data-speed="0.2">01</div>
-        <div class="absolute bottom-1/4 right-10 text-px-gray opacity-20 text-9xl font-header -z-10 parallax-layer" data-speed="0.8">10</div>
+        <div class="absolute top-1/4 left-10 text-px-gray opacity-20 text-6xl md:text-9xl font-header -z-10 parallax-layer" data-speed="0.2">01</div>
+        <div class="absolute bottom-1/4 right-10 text-px-gray opacity-20 text-6xl md:text-9xl font-header -z-10 parallax-layer" data-speed="0.8">10</div>
     </section>
 
     <!-- Tech Arsenal (Marquee) -->
     <div class="bg-px-yellow text-black border-b-4 border-black py-4 overflow-hidden relative">
-        <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-px-yellow to-transparent z-10"></div>
-        <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-px-yellow to-transparent z-10"></div>
-        <div class="flex whitespace-nowrap animate-marquee font-header text-xl gap-16">
+        <div class="absolute inset-y-0 left-0 w-10 md:w-20 bg-gradient-to-r from-px-yellow to-transparent z-10"></div>
+        <div class="absolute inset-y-0 right-0 w-10 md:w-20 bg-gradient-to-l from-px-yellow to-transparent z-10"></div>
+        <div class="flex whitespace-nowrap animate-marquee font-header text-lg md:text-xl gap-8 md:gap-16">
             <span>REACT.JS</span> <span>///</span>
             <span>NEXT.JS</span> <span>///</span>
             <span>TAILWIND</span> <span>///</span>
@@ -238,44 +275,44 @@
     <section id="process" class="py-24 bg-px-dark relative">
         <div class="max-w-6xl mx-auto px-4">
             <div class="mb-16 text-center reveal">
-                <h2 class="font-header text-3xl md:text-5xl text-white mb-4">
+                <h2 class="font-header text-2xl md:text-5xl text-white mb-4">
                     <span class="text-px-cyan">>></span> EXECUTION PROTOCOL
                 </h2>
-                <p class="text-gray-400">Algoritma kerja kami untuk hasil yang konsisten.</p>
+                <p class="text-gray-400 text-sm md:text-base">Algoritma kerja kami untuk hasil yang konsisten.</p>
             </div>
 
-            <div class="relative border-l-4 border-dashed border-gray-700 ml-6 md:ml-12 space-y-16">
+            <div class="relative border-l-4 border-dashed border-gray-700 ml-4 md:ml-12 space-y-16">
                 <!-- Step 1 -->
-                <div class="relative pl-12 md:pl-16 reveal">
-                    <div class="absolute -left-5 top-0 w-10 h-10 bg-px-dark border-4 border-px-green flex items-center justify-center font-header text-px-green">1</div>
-                    <div class="bg-gray-900/50 p-8 border-l-4 border-px-green backdrop-blur-sm hover:bg-gray-800 transition-colors">
-                        <h3 class="font-header text-2xl text-white mb-2">DIAGNOSTIC & STRATEGY</h3>
-                        <p class="text-gray-400 mb-4">Kami membongkar model bisnis Anda. Siapa targetnya? Apa KPI-nya? Kami tidak menulis satu baris kode pun sebelum strateginya valid.</p>
-                        <div class="flex gap-2 text-sm text-px-green font-mono bg-black/30 p-2 w-fit">
+                <div class="relative pl-10 md:pl-16 reveal">
+                    <div class="absolute -left-5 top-0 w-10 h-10 bg-px-dark border-4 border-px-green flex items-center justify-center font-header text-px-green text-sm md:text-base">1</div>
+                    <div class="bg-gray-900/50 p-6 md:p-8 border-l-4 border-px-green backdrop-blur-sm hover:bg-gray-800 transition-colors">
+                        <h3 class="font-header text-lg md:text-2xl text-white mb-2">DIAGNOSTIC & STRATEGY</h3>
+                        <p class="text-gray-400 mb-4 text-sm md:text-base">Kami membongkar model bisnis Anda. Siapa targetnya? Apa KPI-nya? Kami tidak menulis satu baris kode pun sebelum strateginya valid.</p>
+                        <div class="flex gap-2 text-xs md:text-sm text-px-green font-mono bg-black/30 p-2 w-fit">
                             <span>> Output: Blueprint & Wireframe</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Step 2 -->
-                <div class="relative pl-12 md:pl-16 reveal delay-100">
-                    <div class="absolute -left-5 top-0 w-10 h-10 bg-px-dark border-4 border-px-pink flex items-center justify-center font-header text-px-pink">2</div>
-                    <div class="bg-gray-900/50 p-8 border-l-4 border-px-pink backdrop-blur-sm hover:bg-gray-800 transition-colors">
-                        <h3 class="font-header text-2xl text-white mb-2">DEVELOPMENT SPRINT</h3>
-                        <p class="text-gray-400 mb-4">Fase coding intensif. Kami membangun dengan arsitektur modern (Jamstack/MERN) untuk kecepatan load < 1 detik dan keamanan level militer.</p>
-                        <div class="flex gap-2 text-sm text-px-pink font-mono bg-black/30 p-2 w-fit">
+                <div class="relative pl-10 md:pl-16 reveal delay-100">
+                    <div class="absolute -left-5 top-0 w-10 h-10 bg-px-dark border-4 border-px-pink flex items-center justify-center font-header text-px-pink text-sm md:text-base">2</div>
+                    <div class="bg-gray-900/50 p-6 md:p-8 border-l-4 border-px-pink backdrop-blur-sm hover:bg-gray-800 transition-colors">
+                        <h3 class="font-header text-lg md:text-2xl text-white mb-2">DEVELOPMENT SPRINT</h3>
+                        <p class="text-gray-400 mb-4 text-sm md:text-base">Fase coding intensif. Kami membangun dengan arsitektur modern (Jamstack/MERN) untuk kecepatan load < 1 detik dan keamanan level militer.</p>
+                        <div class="flex gap-2 text-xs md:text-sm text-px-pink font-mono bg-black/30 p-2 w-fit">
                             <span>> Output: Beta Build (Staging)</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Step 3 -->
-                <div class="relative pl-12 md:pl-16 reveal delay-200">
-                    <div class="absolute -left-5 top-0 w-10 h-10 bg-px-dark border-4 border-px-cyan flex items-center justify-center font-header text-px-cyan">3</div>
-                    <div class="bg-gray-900/50 p-8 border-l-4 border-px-cyan backdrop-blur-sm hover:bg-gray-800 transition-colors">
-                        <h3 class="font-header text-2xl text-white mb-2">DEPLOY & OPTIMIZE</h3>
-                        <p class="text-gray-400 mb-4">Peluncuran bukan akhir. Kami memasang analytics tracker, melakukan stress test, dan mengoptimalkan SEO on-page untuk dominasi pencarian.</p>
-                        <div class="flex gap-2 text-sm text-px-cyan font-mono bg-black/30 p-2 w-fit">
+                <div class="relative pl-10 md:pl-16 reveal delay-200">
+                    <div class="absolute -left-5 top-0 w-10 h-10 bg-px-dark border-4 border-px-cyan flex items-center justify-center font-header text-px-cyan text-sm md:text-base">3</div>
+                    <div class="bg-gray-900/50 p-6 md:p-8 border-l-4 border-px-cyan backdrop-blur-sm hover:bg-gray-800 transition-colors">
+                        <h3 class="font-header text-lg md:text-2xl text-white mb-2">DEPLOY & OPTIMIZE</h3>
+                        <p class="text-gray-400 mb-4 text-sm md:text-base">Peluncuran bukan akhir. Kami memasang analytics tracker, melakukan stress test, dan mengoptimalkan SEO on-page untuk dominasi pencarian.</p>
+                        <div class="flex gap-2 text-xs md:text-sm text-px-cyan font-mono bg-black/30 p-2 w-fit">
                             <span>> Output: Live Production Site</span>
                         </div>
                     </div>
@@ -287,46 +324,46 @@
     <!-- Work Showcase -->
     <section id="work" class="py-24 bg-black border-y-4 border-px-gray">
         <div class="max-w-7xl mx-auto px-4">
-            <h2 class="font-header text-3xl md:text-5xl mb-16 text-white text-right reveal">
+            <h2 class="font-header text-2xl md:text-5xl mb-16 text-white text-right reveal">
                 SELECTED_DATABASE <span class="text-px-yellow"><<</span>
             </h2>
 
             <div class="grid md:grid-cols-2 gap-8">
                 <!-- Case Study 1 -->
                 <div class="reveal border-4 border-white p-2 bg-gray-900 hover:border-px-yellow transition-colors group cursor-pointer transform hover:-translate-y-2 duration-300">
-                    <div class="h-64 bg-gray-800 overflow-hidden relative border-b-4 border-white group-hover:border-px-yellow transition-colors">
+                    <div class="h-48 md:h-64 bg-gray-800 overflow-hidden relative border-b-4 border-white group-hover:border-px-yellow transition-colors">
                         <div class="absolute inset-0 bg-px-yellow/20 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
                         <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110" alt="Cyber Store">
                     </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-header text-2xl text-white">CYBER STORE 77</h3>
-                            <span class="bg-px-yellow text-black text-xs px-2 py-1 font-header">ECOMMERCE</span>
+                    <div class="p-4 md:p-6">
+                        <div class="flex justify-between items-start mb-4 flex-col md:flex-row gap-2">
+                            <h3 class="font-header text-lg md:text-2xl text-white">CYBER STORE 77</h3>
+                            <span class="bg-px-yellow text-black text-xs px-2 py-1 font-header self-start">ECOMMERCE</span>
                         </div>
-                        <p class="text-gray-400 mb-4">Replatforming toko fashion techwear. Meningkatkan konversi sebesar 140% dengan headless architecture.</p>
-                        <div class="text-px-yellow text-sm font-mono">> Next.js, Shopify API, WebGL</div>
+                        <p class="text-gray-400 mb-4 text-sm md:text-base">Replatforming toko fashion techwear. Meningkatkan konversi sebesar 140% dengan headless architecture.</p>
+                        <div class="text-px-yellow text-xs md:text-sm font-mono">> Next.js, Shopify API, WebGL</div>
                     </div>
                 </div>
 
                 <!-- Case Study 2 -->
                 <div class="reveal delay-100 border-4 border-white p-2 bg-gray-900 hover:border-px-pink transition-colors group cursor-pointer transform hover:-translate-y-2 duration-300">
-                    <div class="h-64 bg-gray-800 overflow-hidden relative border-b-4 border-white group-hover:border-px-pink transition-colors">
+                    <div class="h-48 md:h-64 bg-gray-800 overflow-hidden relative border-b-4 border-white group-hover:border-px-pink transition-colors">
                         <div class="absolute inset-0 bg-px-pink/20 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
                         <img src="https://images.unsplash.com/photo-1614064641938-3e85299748e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110" alt="SaaS App">
                     </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-header text-2xl text-white">NEON TASKS</h3>
-                            <span class="bg-px-pink text-black text-xs px-2 py-1 font-header">WEB APP</span>
+                    <div class="p-4 md:p-6">
+                        <div class="flex justify-between items-start mb-4 flex-col md:flex-row gap-2">
+                            <h3 class="font-header text-lg md:text-2xl text-white">NEON TASKS</h3>
+                            <span class="bg-px-pink text-black text-xs px-2 py-1 font-header self-start">WEB APP</span>
                         </div>
-                        <p class="text-gray-400 mb-4">Dashboard manajemen produktivitas real-time. Menangani 50k+ user aktif tanpa lag.</p>
-                        <div class="text-px-pink text-sm font-mono">> React, Firebase, D3.js</div>
+                        <p class="text-gray-400 mb-4 text-sm md:text-base">Dashboard manajemen produktivitas real-time. Menangani 50k+ user aktif tanpa lag.</p>
+                        <div class="text-px-pink text-xs md:text-sm font-mono">> React, Firebase, D3.js</div>
                     </div>
                 </div>
             </div>
             
             <div class="mt-12 text-center reveal">
-                <a href="#" class="inline-block border-b-2 border-px-green text-px-green hover:bg-px-green hover:text-black transition-colors pb-1">
+                <a href="#" class="inline-block border-b-2 border-px-green text-px-green hover:bg-px-green hover:text-black transition-colors pb-1 text-sm md:text-base">
                     [LOAD MORE DATA...]
                 </a>
             </div>
@@ -336,21 +373,21 @@
     <!-- Pricing Matrix -->
     <section id="pricing" class="py-24 bg-px-dark relative overflow-hidden">
         <!-- Background Decoration (Parallax) -->
-        <div class="absolute top-0 right-0 text-[20rem] font-header text-gray-800/10 leading-none pointer-events-none select-none parallax-layer" data-speed="0.1">
+        <div class="absolute top-0 right-0 text-[10rem] md:text-[20rem] font-header text-gray-800/10 leading-none pointer-events-none select-none parallax-layer" data-speed="0.1">
             $
         </div>
 
         <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <h2 class="font-header text-3xl md:text-5xl text-center mb-16 text-white reveal">
+            <h2 class="font-header text-2xl md:text-5xl text-center mb-16 text-white reveal">
                 INVESTMENT MATRIX
             </h2>
 
             <div class="grid md:grid-cols-3 gap-8 items-end">
                 <!-- Tier 1 -->
                 <div class="reveal bg-gray-900 border-4 border-gray-600 p-6 relative group hover:border-white transition-colors">
-                    <h3 class="font-header text-xl text-gray-400 mb-2">INDIE DEV</h3>
-                    <div class="text-4xl font-header mb-6 text-white">IDR 5jt</div>
-                    <p class="text-sm text-gray-400 mb-8 h-12">Landing page single-page yang solid untuk personal branding atau produk simpel.</p>
+                    <h3 class="font-header text-lg md:text-xl text-gray-400 mb-2">INDIE DEV</h3>
+                    <div class="text-3xl md:text-4xl font-header mb-6 text-white">IDR 5jt</div>
+                    <p class="text-sm text-gray-400 mb-8 h-auto md:h-12">Landing page single-page yang solid untuk personal branding atau produk simpel.</p>
                     
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center gap-2"><span class="text-gray-500">[x]</span> One Page Layout</li>
@@ -363,12 +400,12 @@
 
                 <!-- Tier 2 (Featured) -->
                 <div class="reveal delay-100 bg-gray-900 border-4 border-px-green p-6 relative transform md:-translate-y-4 shadow-[0_0_20px_rgba(0,255,65,0.2)]">
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-px-green text-black px-4 py-1 font-header text-xs border-2 border-white">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-px-green text-black px-4 py-1 font-header text-xs border-2 border-white w-max">
                         RECOMMENDED
                     </div>
-                    <h3 class="font-header text-xl text-px-green mb-2">AAA STUDIO</h3>
-                    <div class="text-4xl font-header mb-6 text-white">IDR 15jt</div>
-                    <p class="text-sm text-gray-400 mb-8 h-12">Website korporat full-stack atau toko online. Kinerja maksimal.</p>
+                    <h3 class="font-header text-lg md:text-xl text-px-green mb-2">AAA STUDIO</h3>
+                    <div class="text-3xl md:text-4xl font-header mb-6 text-white">IDR 15jt</div>
+                    <p class="text-sm text-gray-400 mb-8 h-auto md:h-12">Website korporat full-stack atau toko online. Kinerja maksimal.</p>
                     
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center gap-2"><span class="text-px-green">[x]</span> Multi-Page System</li>
@@ -381,9 +418,9 @@
 
                 <!-- Tier 3 -->
                 <div class="reveal delay-200 bg-gray-900 border-4 border-px-pink p-6 relative group hover:border-white transition-colors">
-                    <h3 class="font-header text-xl text-px-pink mb-2">GOD MODE</h3>
-                    <div class="text-4xl font-header mb-6 text-white">CUSTOM</div>
-                    <p class="text-sm text-gray-400 mb-8 h-12">Aplikasi web kompleks, SaaS, atau platform skala besar.</p>
+                    <h3 class="font-header text-lg md:text-xl text-px-pink mb-2">GOD MODE</h3>
+                    <div class="text-3xl md:text-4xl font-header mb-6 text-white">CUSTOM</div>
+                    <p class="text-sm text-gray-400 mb-8 h-auto md:h-12">Aplikasi web kompleks, SaaS, atau platform skala besar.</p>
                     
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center gap-2"><span class="text-px-pink">[x]</span> Custom Web App</li>
@@ -409,7 +446,7 @@
                         <div class="w-3 h-3 bg-green-500 rounded-full"></div>
                     </div>
                 </div>
-                <div class="p-6 font-mono text-sm md:text-base space-y-6 h-80 overflow-y-auto custom-scrollbar">
+                <div class="p-6 font-mono text-xs md:text-base space-y-6 h-80 overflow-y-auto custom-scrollbar">
                     <div class="text-green-400">
                         <span class="text-gray-500">[10:42 AM] root@techstart:</span> "Gila. Website kami load dalam 0.4 detik. Konversi naik 200% dalam seminggu. Pixel Forge bukan main-main."
                     </div>
@@ -430,37 +467,37 @@
     <!-- FAQ (Troubleshooting) -->
     <section id="faq" class="py-24 bg-px-dark">
         <div class="max-w-3xl mx-auto px-4">
-            <h2 class="font-header text-3xl text-center mb-12 text-white reveal">
+            <h2 class="font-header text-2xl md:text-3xl text-center mb-12 text-white reveal">
                 TROUBLESHOOTING (FAQ)
             </h2>
             
             <div class="space-y-4">
                 <details class="group bg-gray-900 border-2 border-gray-700 open:border-px-green transition-colors reveal">
-                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg select-none">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-base md:text-lg select-none">
                         Berapa lama pengerjaan proyek?
                         <span class="text-px-green group-open:rotate-180 transition-transform">v</span>
                     </summary>
-                    <div class="px-6 pb-6 text-gray-400 border-t-2 border-gray-800 pt-4">
+                    <div class="px-6 pb-6 text-gray-400 border-t-2 border-gray-800 pt-4 text-sm md:text-base">
                         Untuk paket Indie Dev sekitar 1-2 minggu. AAA Studio butuh 3-5 minggu. God Mode tergantung kompleksitas fitur. Kami bekerja dalam sprint mingguan agar Anda selalu update.
                     </div>
                 </details>
 
                 <details class="group bg-gray-900 border-2 border-gray-700 open:border-px-green transition-colors reveal delay-100">
-                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg select-none">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-base md:text-lg select-none">
                         Apakah termasuk hosting & domain?
                         <span class="text-px-green group-open:rotate-180 transition-transform">v</span>
                     </summary>
-                    <div class="px-6 pb-6 text-gray-400 border-t-2 border-gray-800 pt-4">
+                    <div class="px-6 pb-6 text-gray-400 border-t-2 border-gray-800 pt-4 text-sm md:text-base">
                         Tidak. Tapi kami akan membantu setup deployment di Vercel, Netlify, atau VPS pilihan Anda. Domain sepenuhnya hak milik Anda, kami hanya butuh akses DNS.
                     </div>
                 </details>
 
                 <details class="group bg-gray-900 border-2 border-gray-700 open:border-px-green transition-colors reveal delay-200">
-                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg select-none">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-base md:text-lg select-none">
                         Bisa revisi berapa kali?
                         <span class="text-px-green group-open:rotate-180 transition-transform">v</span>
                     </summary>
-                    <div class="px-6 pb-6 text-gray-400 border-t-2 border-gray-800 pt-4">
+                    <div class="px-6 pb-6 text-gray-400 border-t-2 border-gray-800 pt-4 text-sm md:text-base">
                         Kami menerapkan 2x putaran revisi mayor di tahap desain (UI/UX). Setelah masuk fase coding, perubahan besar akan dikenakan biaya tambahan (Change Request). Ini menjaga timeline tetap on-track.
                     </div>
                 </details>
@@ -472,22 +509,22 @@
     <footer id="contact" class="bg-black border-t-8 border-px-green py-16 relative">
         <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
             <div class="reveal">
-                <h2 class="font-header text-3xl md:text-4xl text-white mb-6">READY TO DEPLOY?</h2>
-                <p class="text-gray-400 mb-8 max-w-md">Jangan biarkan kompetitor mengambil market share Anda dengan website yang lebih cepat. Amankan slot pengerjaan bulan ini.</p>
+                <h2 class="font-header text-2xl md:text-4xl text-white mb-6">READY TO DEPLOY?</h2>
+                <p class="text-gray-400 mb-8 max-w-md text-sm md:text-base">Jangan biarkan kompetitor mengambil market share Anda dengan website yang lebih cepat. Amankan slot pengerjaan bulan ini.</p>
                 
-                <div class="flex gap-4">
-                    <a href="mailto:hello@pixelforge.id" class="font-header text-sm bg-px-green text-black px-8 py-4 pixel-box hover:bg-white transition-colors">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <a href="mailto:hello@pixelforge.id" class="font-header text-sm bg-px-green text-black px-8 py-4 pixel-box hover:bg-white transition-colors text-center">
                         EMAIL_US
                     </a>
-                    <a href="#" class="font-header text-sm border-4 border-gray-700 text-gray-400 px-8 py-4 hover:border-white hover:text-white transition-colors">
+                    <a href="#" class="font-header text-sm border-4 border-gray-700 text-gray-400 px-8 py-4 hover:border-white hover:text-white transition-colors text-center">
                         WHATSAPP
                     </a>
                 </div>
             </div>
 
             <div class="border-4 border-gray-800 p-8 text-right reveal delay-100">
-                <div class="font-header text-2xl text-px-cyan mb-4">PIXEL FORGE</div>
-                <div class="space-y-2 text-gray-500 font-mono">
+                <div class="font-header text-xl md:text-2xl text-px-cyan mb-4">PIXEL FORGE</div>
+                <div class="space-y-2 text-gray-500 font-mono text-sm">
                     <p>Jakarta, Indonesia</p>
                     <p>Satrio Tower, Lt 16</p>
                     <p>hello@pixelforge.id</p>
@@ -500,7 +537,7 @@
             </div>
         </div>
         
-        <div class="text-center mt-16 pt-8 border-t-2 border-gray-900 text-gray-700 text-sm font-mono">
+        <div class="text-center mt-16 pt-8 border-t-2 border-gray-900 text-gray-700 text-xs md:text-sm font-mono">
             © 2025 PIXEL FORGE AGENCY. NO COOKIES. NO TRACKERS. JUST CODE.
         </div>
     </footer>
@@ -562,7 +599,7 @@
         // LOGIC BARU: SCROLL REVEAL & PARALLAX
         // ----------------------------------------------------
 
-        // 1. Scroll Reveal (Fade In) - Menggunakan Intersection Observer untuk performa tinggi
+        // 1. Scroll Reveal (Fade In)
         const revealElements = document.querySelectorAll('.reveal');
         
         const revealObserver = new IntersectionObserver((entries) => {
@@ -572,18 +609,18 @@
                 }
             });
         }, {
-            threshold: 0.15, // Muncul ketika 15% elemen terlihat
+            threshold: 0.1, 
             rootMargin: "0px 0px -50px 0px"
         });
 
         revealElements.forEach(el => revealObserver.observe(el));
 
-        // 2. Parallax Effect (Hanya pada desktop untuk menghindari jank di mobile)
+        // 2. Parallax Effect (Hanya pada desktop)
         const parallaxLayers = document.querySelectorAll('.parallax-layer');
         
         window.addEventListener('scroll', () => {
-            // Check if user prefers reduced motion
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // Disable parallax on mobile logic for smoother performance
             if (prefersReducedMotion || window.innerWidth < 768) return;
 
             const scrolled = window.pageYOffset;
@@ -606,6 +643,26 @@
                 navbar.classList.add('py-2');
             }
         });
+
+        // 4. Mobile Menu Logic (NEW)
+        const openMenuBtn = document.getElementById('open-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('menu-open'); // Prevent body scroll
+        }
+
+        openMenuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        
+        // Close menu when clicking a link
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
     </script>
 </body>
 </html>
