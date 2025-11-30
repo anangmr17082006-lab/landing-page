@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCUS ENGINE /// RELEASE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --fg: #e0e0e0;
+            --accent: #00ff41; /* Terminal Green */
+            --grid: #333;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        /* Blueprint Grid Background */
+        .bg-blueprint {
+            background-image: 
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center top;
+        }
+
+        .border-tech {
+            border: 1px solid var(--grid);
+        }
+
+        .text-accent {
+            color: var(--accent);
+        }
+
+        .btn-tech {
+            background: var(--fg);
+            color: var(--bg);
+            border: 1px solid var(--fg);
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-tech:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+        }
+
+        /* Technical Crosshairs */
+        .crosshair {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+        }
+        .crosshair::before, .crosshair::after {
+            content: '';
+            position: absolute;
+            background: var(--fg);
+        }
+        .crosshair::before { width: 100%; height: 1px; top: 50%; }
+        .crosshair::after { width: 1px; height: 100%; left: 50%; }
+
+        .ch-tl { top: -10px; left: -10px; }
+        .ch-tr { top: -10px; right: -10px; }
+        .ch-bl { bottom: -10px; left: -10px; }
+        .ch-br { bottom: -10px; right: -10px; }
+
+        /* Glitch Effect specifically for the main title */
+        .glitch-hover:hover {
+            animation: glitch-anim 0.3s infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+    </style>
+</head>
+<body class="bg-blueprint min-h-screen flex flex-col relative selection:bg-white selection:text-black">
+
+    <!-- Top Bar -->
+    <nav class="border-b border-tech bg-[#0a0a0a]/90 backdrop-blur fixed w-full z-50">
+        <div class="container mx-auto px-6 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-accent animate-pulse" style="background-color: var(--accent);"></div>
+                <span class="font-bold tracking-tighter">FOCUS_ENGINE</span>
+                <span class="text-xs text-gray-500 border border-gray-800 px-1">v1.0</span>
+            </div>
+            <div class="hidden md:flex gap-8 text-xs uppercase tracking-widest text-gray-400">
+                <a href="#specs" class="hover:text-white transition-colors">[ Specs ]</a>
+                <a href="#deploy" class="hover:text-white transition-colors">[ Deploy ]</a>
+            </div>
+            <button class="border border-tech px-4 py-1 text-xs uppercase hover:bg-white hover:text-black transition-colors">
+                System Status: Online
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-20 border-b border-tech relative overflow-hidden">
+        <div class="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <div class="relative z-10">
+                <div class="inline-block border border-accent text-accent px-2 py-1 text-[10px] uppercase mb-4 tracking-widest">
+                    /// Productivity Enhancement Protocol
+                </div>
+                <h1 class="text-5xl md:text-7xl font-display font-bold leading-none mb-6 uppercase glitch-hover cursor-default">
+                    Kill The <br>
+                    <span class="text-transparent" style="-webkit-text-stroke: 1px var(--fg);">Distraction</span>
+                </h1>
+                <p class="text-gray-400 max-w-md mb-8 leading-relaxed">
+                    A brutalist time-management interface designed for deep work cycles. 
+                    No fluff. No gamification. Just raw chronometric pressure.
+                </p>
+                <div class="flex gap-4">
+                    <button class="btn-tech px-8 py-4 w-full md:w-auto">
+                        Initialize Engine
+                    </button>
+                    <button class="border border-tech px-8 py-4 w-full md:w-auto hover:bg-[#111] transition-colors uppercase text-sm">
+                        Read Manifesto
+                    </button>
+                </div>
+            </div>
+
+            <!-- Abstract Visual / Blueprint Graphic -->
+            <div class="relative h-[400px] border border-tech flex items-center justify-center bg-[#050505]">
+                <div class="crosshair ch-tl"></div>
+                <div class="crosshair ch-tr"></div>
+                <div class="crosshair ch-bl"></div>
+                <div class="crosshair ch-br"></div>
+                
+                <!-- Mock Interface inside -->
+                <div class="w-64 h-64 border border-dashed border-gray-700 rounded-full flex items-center justify-center relative animate-spin-slow" style="animation: spin 20s linear infinite;">
+                    <div class="absolute inset-0 border-t border-accent opacity-50"></div>
+                </div>
+                <div class="absolute text-center">
+                    <div class="text-6xl font-bold font-display">25:00</div>
+                    <div class="text-xs text-accent mt-2 animate-pulse">TIMER_ACTIVE</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-4 right-6 text-[10px] text-gray-500 font-mono flex flex-col items-end">
+            <span>SCROLL_Y: ENABLED</span>
+            <span>COORD: 00,00</span>
+        </div>
+    </header>
+
+    <!-- Specs / Grid Section -->
+    <section id="specs" class="py-20 border-b border-tech bg-[#0a0a0a]">
+        <div class="container mx-auto px-6">
+            <div class="flex items-baseline justify-between mb-12">
+                <h2 class="text-2xl font-display uppercase">Technical Specifications</h2>
+                <span class="text-xs text-gray-500">MODULE_ID: 0X_F2</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 border-t border-l border-tech">
+                <!-- Feature 1 -->
+                <div class="p-8 border-r border-b border-tech hover:bg-[#111] transition-colors group">
+                    <div class="text-accent mb-4 text-xl">01</div>
+                    <h3 class="font-bold uppercase mb-2 group-hover:translate-x-2 transition-transform">Audio Synthesis</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        Generated waveforms using Web Audio API. No external MP3 assets. Pure frequency manipulation.
+                    </p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="p-8 border-r border-b border-tech hover:bg-[#111] transition-colors group">
+                    <div class="text-accent mb-4 text-xl">02</div>
+                    <h3 class="font-bold uppercase mb-2 group-hover:translate-x-2 transition-transform">DOM Manipulation</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        Aggressive title updates and progress bar rendering for peripheral awareness.
+                    </p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="p-8 border-r border-b border-tech hover:bg-[#111] transition-colors group">
+                    <div class="text-accent mb-4 text-xl">03</div>
+                    <h3 class="font-bold uppercase mb-2 group-hover:translate-x-2 transition-transform">Zero Dependencies</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        Built on vanilla JavaScript. Lightweight execution. Instant load times (< 50ms).
+                    </p>
+                </div>
+                 <!-- Feature 4 -->
+                 <div class="p-8 border-r border-b border-tech hover:bg-[#111] transition-colors group">
+                    <div class="text-accent mb-4 text-xl">04</div>
+                    <h3 class="font-bold uppercase mb-2 group-hover:translate-x-2 transition-transform">Focus Mode</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        Visual noise reduction protocol. Removes UI clutter during active cycles.
+                    </p>
+                </div>
+                 <!-- Feature 5 -->
+                 <div class="p-8 border-r border-b border-tech hover:bg-[#111] transition-colors group">
+                    <div class="text-accent mb-4 text-xl">05</div>
+                    <h3 class="font-bold uppercase mb-2 group-hover:translate-x-2 transition-transform">Local Storage</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        Persist cycle counts across sessions without server-side tracking.
+                    </p>
+                </div>
+                 <!-- Feature 6 (CTA in Grid) -->
+                 <div class="p-8 border-r border-b border-tech bg-white text-black flex flex-col justify-center items-center text-center">
+                    <h3 class="font-bold uppercase mb-4 text-xl">Ready to Focus?</h3>
+                    <button class="bg-black text-white px-6 py-2 uppercase text-xs font-bold hover:bg-accent hover:text-black transition-colors w-full">
+                        Start Session
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing / Deployment -->
+    <section id="deploy" class="py-20">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="border border-tech p-1 relative">
+                <!-- Decorative Corners -->
+                <div class="absolute top-0 left-0 w-2 h-2 bg-accent"></div>
+                <div class="absolute top-0 right-0 w-2 h-2 bg-accent"></div>
+                <div class="absolute bottom-0 left-0 w-2 h-2 bg-accent"></div>
+                <div class="absolute bottom-0 right-0 w-2 h-2 bg-accent"></div>
+
+                <div class="bg-[#0f0f0f] p-8 md:p-12 text-center border border-gray-800">
+                    <h2 class="text-3xl font-display uppercase mb-2">Access License</h2>
+                    <p class="text-gray-500 mb-8 text-sm font-mono">LIFETIME ACCESS /// OPEN SOURCE</p>
+                    
+                    <div class="text-6xl font-bold mb-8 flex justify-center items-start gap-2">
+                        <span class="text-2xl mt-2">$</span>0<span class="text-xl text-gray-500 mt-2">.00</span>
+                    </div>
+
+                    <ul class="text-left max-w-xs mx-auto space-y-3 mb-10 text-sm text-gray-400 font-mono">
+                        <li class="flex items-center gap-3">
+                            <span class="text-accent">✓</span> Full Source Code
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-accent">✓</span> Unlimited Usage
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-accent">✓</span> Self-Hosted Ready
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-accent">✓</span> No Tracking / Ads
+                        </li>
+                    </ul>
+
+                    <button class="btn-tech w-full py-4 text-lg">
+                        DOWNLOAD SOURCE
+                    </button>
+                    <p class="text-[10px] text-gray-600 mt-4 uppercase">
+                        By downloading, you agree to eliminate excuses.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-tech py-12 bg-[#050505] mt-auto">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-xs text-gray-500 uppercase">
+                &copy; 2025 Focus Engine Corp. <br>
+                Jakarta, Indonesia Server.
+            </div>
+            <div class="font-display font-bold text-2xl tracking-widest text-gray-800 select-none">
+                FOCUS_ENGINE
+            </div>
+            <div class="flex gap-4 text-xs uppercase">
+                <a href="#" class="hover:text-accent">GitHub</a>
+                <a href="#" class="hover:text-accent">Twitter</a>
+                <a href="#" class="hover:text-accent">Docs</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

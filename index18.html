@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXEL FORGE | High-Performance Web Agency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'px-dark': '#0f0f1a',
+                        'px-green': '#00ff41',
+                        'px-pink': '#ff00ff',
+                        'px-cyan': '#00ffff',
+                        'px-yellow': '#fff01f',
+                        'px-gray': '#2d2d2d',
+                        'px-red': '#ff0055',
+                    },
+                    fontFamily: {
+                        'header': ['"Press Start 2P"', 'cursive'],
+                        'body': ['"VT323"', 'monospace'],
+                    },
+                    animation: {
+                        'marquee': 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities */
+        body {
+            background-color: #0f0f1a;
+            color: #ffffff;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f1a;
+            border-left: 2px solid #2d2d2d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00ff41;
+            border: 2px solid #0f0f1a;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff00ff;
+        }
+
+        /* Hard Shadows */
+        .pixel-box {
+            border: 4px solid white;
+            box-shadow: 8px 8px 0px 0px #000;
+            transition: all 0.1s ease;
+        }
+        .pixel-box:active {
+            transform: translate(4px, 4px);
+            box-shadow: 4px 4px 0px 0px #000;
+        }
+        .pixel-box-green {
+            border: 4px solid #00ff41;
+            box-shadow: 8px 8px 0px 0px #00ff41;
+        }
+        .pixel-box-green:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 12px 12px 0px 0px #00ff41;
+        }
+        .pixel-box-pink {
+            border: 4px solid #ff00ff;
+            box-shadow: 8px 8px 0px 0px #ff00ff;
+        }
+        .pixel-box-red {
+            border: 4px solid #ff0055;
+            box-shadow: 8px 8px 0px 0px #ff0055;
+        }
+
+        /* Glitch Text */
+        .glitch-wrapper { position: relative; }
+        .glitch { position: relative; color: #fff; mix-blend-mode: lighten; }
+        .glitch:before, .glitch:after {
+            content: attr(data-text); position: absolute; top: 0; width: 100%;
+            background: #0f0f1a; clip: rect(0, 0, 0, 0);
+        }
+        .glitch:before {
+            left: -2px; text-shadow: 2px 0 #ff00ff;
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        .glitch:after {
+            left: 2px; text-shadow: -2px 0 #00ffff;
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(20px, 9999px, 15px, 0); }
+            100% { clip: rect(40px, 9999px, 60px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(120px, 9999px, 10px, 0); }
+            100% { clip: rect(5px, 9999px, 110px, 0); }
+        }
+
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3; }
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px; z-index: 50; pointer-events: none;
+        }
+        
+        /* Accordion Style */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary ~ * { animation: sweep .3s ease-in-out; }
+        @keyframes sweep { 0% {opacity: 0; transform: translateY(-10px)} 100% {opacity: 1; transform: translateY(0)} }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+            filter: blur(4px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        /* Stagger delays */
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+    </style>
+</head>
+<body class="font-body text-xl selection:bg-px-pink selection:text-white">
+
+    <canvas id="bg-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-40 top-0 left-0 border-b-4 border-px-gray bg-px-dark/95 backdrop-blur-md transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-px-green animate-pulse border-2 border-white"></div>
+                    <span class="font-header text-white text-sm md:text-lg tracking-tight">PIXEL<span class="text-px-green">FORGE</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8 font-header text-xs">
+                        <a href="#process" class="hover:text-px-cyan transition-colors">[PROCESS]</a>
+                        <a href="#work" class="hover:text-px-yellow transition-colors">[WORK]</a>
+                        <a href="#pricing" class="hover:text-px-pink transition-colors">[PRICING]</a>
+                        <a href="#faq" class="hover:text-px-green transition-colors">[FAQ]</a>
+                        <button class="bg-px-pink text-white px-4 py-2 border-2 border-white hover:bg-white hover:text-black hover:shadow-[4px_4px_0px_0px_#fff] transition-all transform active:translate-y-1 active:shadow-none">
+                            INIT_PROJECT()
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Parallax Enabled) -->
+    <section class="min-h-screen flex items-center justify-center pt-20 relative border-b-4 border-px-gray overflow-hidden">
+        <div class="text-center px-4 max-w-5xl mx-auto z-10 parallax-layer" data-speed="0.5">
+            <div class="inline-flex items-center gap-2 border-2 border-px-cyan px-4 py-1 mb-6 bg-black/50 backdrop-blur reveal active">
+                <div class="w-3 h-3 bg-px-red rounded-full animate-ping"></div>
+                <span class="text-px-cyan uppercase tracking-widest text-lg">System Status: ONLINE</span>
+            </div>
+            
+            <h1 class="font-header text-4xl md:text-7xl lg:text-8xl leading-tight mb-8 glitch-wrapper reveal delay-100 active">
+                <span class="glitch" data-text="DOMINATE">DOMINATE</span>
+                <span class="text-white">THE GRID</span>
+            </h1>
+            
+            <p class="text-gray-300 text-2xl md:text-3xl max-w-3xl mx-auto mb-12 bg-black/60 p-6 border-x-4 border-px-green leading-relaxed reveal delay-200 active">
+                Kami tidak membuat website "cantik". Kami merekayasa aset digital berkinerja tinggi yang mengonversi trafik menjadi profit. 
+                <span class="text-px-green block mt-2">> Zero Fluff. Maximum Efficiency.</span>
+            </p>
+
+            <div class="flex flex-col md:flex-row gap-6 justify-center reveal delay-300 active">
+                <a href="#pricing" class="font-header text-sm bg-px-green text-black px-8 py-5 pixel-box hover:bg-white transition-colors">
+                    VIEW_UPGRADES
+                </a>
+                <a href="#work" class="font-header text-sm border-4 border-white text-white px-8 py-5 hover:bg-white hover:text-black transition-all box-shadow-none hover:shadow-[8px_8px_0px_0px_#fff]">
+                    VIEW_DATABASE
+                </a>
+            </div>
+        </div>
+        
+        <!-- Background Elements for Parallax -->
+        <div class="absolute top-1/4 left-10 text-px-gray opacity-20 text-9xl font-header -z-10 parallax-layer" data-speed="0.2">01</div>
+        <div class="absolute bottom-1/4 right-10 text-px-gray opacity-20 text-9xl font-header -z-10 parallax-layer" data-speed="0.8">10</div>
+    </section>
+
+    <!-- Tech Arsenal (Marquee) -->
+    <div class="bg-px-yellow text-black border-b-4 border-black py-4 overflow-hidden relative">
+        <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-px-yellow to-transparent z-10"></div>
+        <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-px-yellow to-transparent z-10"></div>
+        <div class="flex whitespace-nowrap animate-marquee font-header text-xl gap-16">
+            <span>REACT.JS</span> <span>///</span>
+            <span>NEXT.JS</span> <span>///</span>
+            <span>TAILWIND</span> <span>///</span>
+            <span>NODE.JS</span> <span>///</span>
+            <span>TYPESCRIPT</span> <span>///</span>
+            <span>FIREBASE</span> <span>///</span>
+            <span>WEBGL</span> <span>///</span>
+            <span>REACT.JS</span> <span>///</span>
+            <span>NEXT.JS</span> <span>///</span>
+            <span>TAILWIND</span> <span>///</span>
+            <span>NODE.JS</span> <span>///</span>
+            <span>TYPESCRIPT</span> <span>///</span>
+            <span>FIREBASE</span> <span>///</span>
+            <span>WEBGL</span> <span>///</span>
+        </div>
+    </div>
+
+    <!-- The Protocol (Process) -->
+    <section id="process" class="py-24 bg-px-dark relative">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="mb-16 text-center reveal">
+                <h2 class="font-header text-3xl md:text-5xl text-white mb-4">
+                    <span class="text-px-cyan">>></span> EXECUTION PROTOCOL
+                </h2>
+                <p class="text-gray-400">Algoritma kerja kami untuk hasil yang konsisten.</p>
+            </div>
+
+            <div class="relative border-l-4 border-dashed border-gray-700 ml-6 md:ml-12 space-y-16">
+                <!-- Step 1 -->
+                <div class="relative pl-12 md:pl-16 reveal">
+                    <div class="absolute -left-5 top-0 w-10 h-10 bg-px-dark border-4 border-px-green flex items-center justify-center font-header text-px-green">1</div>
+                    <div class="bg-gray-900/50 p-8 border-l-4 border-px-green backdrop-blur-sm hover:bg-gray-800 transition-colors">
+                        <h3 class="font-header text-2xl text-white mb-2">DIAGNOSTIC & STRATEGY</h3>
+                        <p class="text-gray-400 mb-4">Kami membongkar model bisnis Anda. Siapa targetnya? Apa KPI-nya? Kami tidak menulis satu baris kode pun sebelum strateginya valid.</p>
+                        <div class="flex gap-2 text-sm text-px-green font-mono bg-black/30 p-2 w-fit">
+                            <span>> Output: Blueprint & Wireframe</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative pl-12 md:pl-16 reveal delay-100">
+                    <div class="absolute -left-5 top-0 w-10 h-10 bg-px-dark border-4 border-px-pink flex items-center justify-center font-header text-px-pink">2</div>
+                    <div class="bg-gray-900/50 p-8 border-l-4 border-px-pink backdrop-blur-sm hover:bg-gray-800 transition-colors">
+                        <h3 class="font-header text-2xl text-white mb-2">DEVELOPMENT SPRINT</h3>
+                        <p class="text-gray-400 mb-4">Fase coding intensif. Kami membangun dengan arsitektur modern (Jamstack/MERN) untuk kecepatan load < 1 detik dan keamanan level militer.</p>
+                        <div class="flex gap-2 text-sm text-px-pink font-mono bg-black/30 p-2 w-fit">
+                            <span>> Output: Beta Build (Staging)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative pl-12 md:pl-16 reveal delay-200">
+                    <div class="absolute -left-5 top-0 w-10 h-10 bg-px-dark border-4 border-px-cyan flex items-center justify-center font-header text-px-cyan">3</div>
+                    <div class="bg-gray-900/50 p-8 border-l-4 border-px-cyan backdrop-blur-sm hover:bg-gray-800 transition-colors">
+                        <h3 class="font-header text-2xl text-white mb-2">DEPLOY & OPTIMIZE</h3>
+                        <p class="text-gray-400 mb-4">Peluncuran bukan akhir. Kami memasang analytics tracker, melakukan stress test, dan mengoptimalkan SEO on-page untuk dominasi pencarian.</p>
+                        <div class="flex gap-2 text-sm text-px-cyan font-mono bg-black/30 p-2 w-fit">
+                            <span>> Output: Live Production Site</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Showcase -->
+    <section id="work" class="py-24 bg-black border-y-4 border-px-gray">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="font-header text-3xl md:text-5xl mb-16 text-white text-right reveal">
+                SELECTED_DATABASE <span class="text-px-yellow"><<</span>
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Case Study 1 -->
+                <div class="reveal border-4 border-white p-2 bg-gray-900 hover:border-px-yellow transition-colors group cursor-pointer transform hover:-translate-y-2 duration-300">
+                    <div class="h-64 bg-gray-800 overflow-hidden relative border-b-4 border-white group-hover:border-px-yellow transition-colors">
+                        <div class="absolute inset-0 bg-px-yellow/20 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110" alt="Cyber Store">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-header text-2xl text-white">CYBER STORE 77</h3>
+                            <span class="bg-px-yellow text-black text-xs px-2 py-1 font-header">ECOMMERCE</span>
+                        </div>
+                        <p class="text-gray-400 mb-4">Replatforming toko fashion techwear. Meningkatkan konversi sebesar 140% dengan headless architecture.</p>
+                        <div class="text-px-yellow text-sm font-mono">> Next.js, Shopify API, WebGL</div>
+                    </div>
+                </div>
+
+                <!-- Case Study 2 -->
+                <div class="reveal delay-100 border-4 border-white p-2 bg-gray-900 hover:border-px-pink transition-colors group cursor-pointer transform hover:-translate-y-2 duration-300">
+                    <div class="h-64 bg-gray-800 overflow-hidden relative border-b-4 border-white group-hover:border-px-pink transition-colors">
+                        <div class="absolute inset-0 bg-px-pink/20 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1614064641938-3e85299748e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110" alt="SaaS App">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-header text-2xl text-white">NEON TASKS</h3>
+                            <span class="bg-px-pink text-black text-xs px-2 py-1 font-header">WEB APP</span>
+                        </div>
+                        <p class="text-gray-400 mb-4">Dashboard manajemen produktivitas real-time. Menangani 50k+ user aktif tanpa lag.</p>
+                        <div class="text-px-pink text-sm font-mono">> React, Firebase, D3.js</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center reveal">
+                <a href="#" class="inline-block border-b-2 border-px-green text-px-green hover:bg-px-green hover:text-black transition-colors pb-1">
+                    [LOAD MORE DATA...]
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Matrix -->
+    <section id="pricing" class="py-24 bg-px-dark relative overflow-hidden">
+        <!-- Background Decoration (Parallax) -->
+        <div class="absolute top-0 right-0 text-[20rem] font-header text-gray-800/10 leading-none pointer-events-none select-none parallax-layer" data-speed="0.1">
+            $
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <h2 class="font-header text-3xl md:text-5xl text-center mb-16 text-white reveal">
+                INVESTMENT MATRIX
+            </h2>
+
+            <div class="grid md:grid-cols-3 gap-8 items-end">
+                <!-- Tier 1 -->
+                <div class="reveal bg-gray-900 border-4 border-gray-600 p-6 relative group hover:border-white transition-colors">
+                    <h3 class="font-header text-xl text-gray-400 mb-2">INDIE DEV</h3>
+                    <div class="text-4xl font-header mb-6 text-white">IDR 5jt</div>
+                    <p class="text-sm text-gray-400 mb-8 h-12">Landing page single-page yang solid untuk personal branding atau produk simpel.</p>
+                    
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center gap-2"><span class="text-gray-500">[x]</span> One Page Layout</li>
+                        <li class="flex items-center gap-2"><span class="text-gray-500">[x]</span> Responsive Design</li>
+                        <li class="flex items-center gap-2"><span class="text-gray-500">[x]</span> Basic SEO</li>
+                        <li class="flex items-center gap-2 text-gray-600"><span class="text-gray-700">[-]</span> CMS Integration</li>
+                    </ul>
+                    <button class="w-full py-3 border-2 border-gray-500 text-gray-400 font-header text-xs hover:bg-white hover:text-black hover:border-white transition-colors">SELECT_TIER</button>
+                </div>
+
+                <!-- Tier 2 (Featured) -->
+                <div class="reveal delay-100 bg-gray-900 border-4 border-px-green p-6 relative transform md:-translate-y-4 shadow-[0_0_20px_rgba(0,255,65,0.2)]">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-px-green text-black px-4 py-1 font-header text-xs border-2 border-white">
+                        RECOMMENDED
+                    </div>
+                    <h3 class="font-header text-xl text-px-green mb-2">AAA STUDIO</h3>
+                    <div class="text-4xl font-header mb-6 text-white">IDR 15jt</div>
+                    <p class="text-sm text-gray-400 mb-8 h-12">Website korporat full-stack atau toko online. Kinerja maksimal.</p>
+                    
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center gap-2"><span class="text-px-green">[x]</span> Multi-Page System</li>
+                        <li class="flex items-center gap-2"><span class="text-px-green">[x]</span> CMS (Content Mgt)</li>
+                        <li class="flex items-center gap-2"><span class="text-px-green">[x]</span> Advanced Animations</li>
+                        <li class="flex items-center gap-2"><span class="text-px-green">[x]</span> Speed Optimization</li>
+                    </ul>
+                    <button class="w-full py-3 bg-px-green text-black font-header text-xs hover:bg-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,255,65,0.5)]">SELECT_TIER</button>
+                </div>
+
+                <!-- Tier 3 -->
+                <div class="reveal delay-200 bg-gray-900 border-4 border-px-pink p-6 relative group hover:border-white transition-colors">
+                    <h3 class="font-header text-xl text-px-pink mb-2">GOD MODE</h3>
+                    <div class="text-4xl font-header mb-6 text-white">CUSTOM</div>
+                    <p class="text-sm text-gray-400 mb-8 h-12">Aplikasi web kompleks, SaaS, atau platform skala besar.</p>
+                    
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center gap-2"><span class="text-px-pink">[x]</span> Custom Web App</li>
+                        <li class="flex items-center gap-2"><span class="text-px-pink">[x]</span> Database Design</li>
+                        <li class="flex items-center gap-2"><span class="text-px-pink">[x]</span> API Integration</li>
+                        <li class="flex items-center gap-2"><span class="text-px-pink">[x]</span> Dedicated Support</li>
+                    </ul>
+                    <button class="w-full py-3 border-2 border-px-pink text-px-pink font-header text-xs hover:bg-px-pink hover:text-white transition-colors">CONTACT_US</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials (System Logs) -->
+    <section class="py-16 bg-gray-900 border-y-4 border-black">
+        <div class="max-w-4xl mx-auto px-4 reveal">
+            <div class="border-2 border-gray-700 bg-black p-1">
+                <div class="bg-gray-800 px-4 py-2 flex justify-between items-center border-b-2 border-gray-700">
+                    <span class="font-header text-xs text-gray-400">SYSTEM_LOGS / USER_FEEDBACK.TXT</span>
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                    </div>
+                </div>
+                <div class="p-6 font-mono text-sm md:text-base space-y-6 h-80 overflow-y-auto custom-scrollbar">
+                    <div class="text-green-400">
+                        <span class="text-gray-500">[10:42 AM] root@techstart:</span> "Gila. Website kami load dalam 0.4 detik. Konversi naik 200% dalam seminggu. Pixel Forge bukan main-main."
+                    </div>
+                    <div class="text-cyan-400">
+                        <span class="text-gray-500">[14:15 PM] admin@fashionbrand:</span> "Desainnya beda dari yang lain. Klien kami suka estetikanya. Tim mereka juga sangat komunikatif."
+                    </div>
+                    <div class="text-yellow-400">
+                        <span class="text-gray-500">[09:20 AM] dev@cryptodao:</span> "Kode yang bersih. Gampang di-maintain. Jarang nemu agensi yang peduli kualitas code backend seperti ini."
+                    </div>
+                    <div class="text-gray-400 animate-pulse">
+                        <span class="text-gray-600">[SYSTEM]:</span> Waiting for new input...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ (Troubleshooting) -->
+    <section id="faq" class="py-24 bg-px-dark">
+        <div class="max-w-3xl mx-auto px-4">
+            <h2 class="font-header text-3xl text-center mb-12 text-white reveal">
+                TROUBLESHOOTING (FAQ)
+            </h2>
+            
+            <div class="space-y-4">
+                <details class="group bg-gray-900 border-2 border-gray-700 open:border-px-green transition-colors reveal">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg select-none">
+                        Berapa lama pengerjaan proyek?
+                        <span class="text-px-green group-open:rotate-180 transition-transform">v</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-gray-400 border-t-2 border-gray-800 pt-4">
+                        Untuk paket Indie Dev sekitar 1-2 minggu. AAA Studio butuh 3-5 minggu. God Mode tergantung kompleksitas fitur. Kami bekerja dalam sprint mingguan agar Anda selalu update.
+                    </div>
+                </details>
+
+                <details class="group bg-gray-900 border-2 border-gray-700 open:border-px-green transition-colors reveal delay-100">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg select-none">
+                        Apakah termasuk hosting & domain?
+                        <span class="text-px-green group-open:rotate-180 transition-transform">v</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-gray-400 border-t-2 border-gray-800 pt-4">
+                        Tidak. Tapi kami akan membantu setup deployment di Vercel, Netlify, atau VPS pilihan Anda. Domain sepenuhnya hak milik Anda, kami hanya butuh akses DNS.
+                    </div>
+                </details>
+
+                <details class="group bg-gray-900 border-2 border-gray-700 open:border-px-green transition-colors reveal delay-200">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg select-none">
+                        Bisa revisi berapa kali?
+                        <span class="text-px-green group-open:rotate-180 transition-transform">v</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-gray-400 border-t-2 border-gray-800 pt-4">
+                        Kami menerapkan 2x putaran revisi mayor di tahap desain (UI/UX). Setelah masuk fase coding, perubahan besar akan dikenakan biaya tambahan (Change Request). Ini menjaga timeline tetap on-track.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-black border-t-8 border-px-green py-16 relative">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
+            <div class="reveal">
+                <h2 class="font-header text-3xl md:text-4xl text-white mb-6">READY TO DEPLOY?</h2>
+                <p class="text-gray-400 mb-8 max-w-md">Jangan biarkan kompetitor mengambil market share Anda dengan website yang lebih cepat. Amankan slot pengerjaan bulan ini.</p>
+                
+                <div class="flex gap-4">
+                    <a href="mailto:hello@pixelforge.id" class="font-header text-sm bg-px-green text-black px-8 py-4 pixel-box hover:bg-white transition-colors">
+                        EMAIL_US
+                    </a>
+                    <a href="#" class="font-header text-sm border-4 border-gray-700 text-gray-400 px-8 py-4 hover:border-white hover:text-white transition-colors">
+                        WHATSAPP
+                    </a>
+                </div>
+            </div>
+
+            <div class="border-4 border-gray-800 p-8 text-right reveal delay-100">
+                <div class="font-header text-2xl text-px-cyan mb-4">PIXEL FORGE</div>
+                <div class="space-y-2 text-gray-500 font-mono">
+                    <p>Jakarta, Indonesia</p>
+                    <p>Satrio Tower, Lt 16</p>
+                    <p>hello@pixelforge.id</p>
+                </div>
+                <div class="mt-8 flex justify-end gap-6 text-2xl text-white">
+                    <a href="#" class="hover:text-px-pink transition-colors"><i class="hover:scale-110 transition-transform">IG</i></a>
+                    <a href="#" class="hover:text-px-cyan transition-colors"><i class="hover:scale-110 transition-transform">TW</i></a>
+                    <a href="#" class="hover:text-px-yellow transition-colors"><i class="hover:scale-110 transition-transform">GH</i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-16 pt-8 border-t-2 border-gray-900 text-gray-700 text-sm font-mono">
+            © 2025 PIXEL FORGE AGENCY. NO COOKIES. NO TRACKERS. JUST CODE.
+        </div>
+    </footer>
+
+    <!-- Script -->
+    <script>
+        // Canvas Animation Logic
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        class Pixel {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height + height; // Start below screen
+                this.size = Math.random() * 4 + 2;
+                this.speedY = Math.random() * 2 + 0.5;
+                this.color = Math.random() > 0.9 ? '#00ff41' : (Math.random() > 0.5 ? '#2d2d2d' : '#1a1a1a'); 
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.y -= this.speedY;
+                if (this.y < -10) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.fillRect(Math.floor(this.x), Math.floor(this.y), this.size, this.size);
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.floor(width / 8); 
+            for (let i = 0; i < particleCount; i++) particles.push(new Pixel());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => { resize(); initParticles(); });
+        resize(); initParticles(); animate();
+
+        // ----------------------------------------------------
+        // LOGIC BARU: SCROLL REVEAL & PARALLAX
+        // ----------------------------------------------------
+
+        // 1. Scroll Reveal (Fade In) - Menggunakan Intersection Observer untuk performa tinggi
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.15, // Muncul ketika 15% elemen terlihat
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 2. Parallax Effect (Hanya pada desktop untuk menghindari jank di mobile)
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        
+        window.addEventListener('scroll', () => {
+            // Check if user prefers reduced motion
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion || window.innerWidth < 768) return;
+
+            const scrolled = window.pageYOffset;
+            
+            parallaxLayers.forEach(layer => {
+                const speed = layer.getAttribute('data-speed');
+                const yPos = -(scrolled * speed);
+                layer.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // 3. Navbar Shrink on Scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-0', 'shadow-lg');
+                navbar.classList.remove('py-2');
+            } else {
+                navbar.classList.remove('py-0', 'shadow-lg');
+                navbar.classList.add('py-2');
+            }
+        });
+    </script>
+</body>
+</html>
